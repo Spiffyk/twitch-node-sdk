@@ -1,0 +1,97 @@
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Cache-control" content="no-cache">
+  <title>TwitchTV SDK Integration Test</title>
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+
+  <script src="../twitch.js"></script>
+
+  <script>
+    window.CLIENT_ID = '3yaddo7bisin8sczj9l1l1dyh';
+    window.REDIRECT_URI = 'http://dl.dropbox.com/u/4110/oauth.html'
+    $(function() {
+      Twitch.init({clientId: CLIENT_ID});
+
+      $('.twitch-connect').click(function() {
+        Twitch.login({
+          redirect_uri: REDIRECT_URI,
+          popup: true,
+          scope: ['user_read', 'channel_read']
+        });
+        $('.fragment-entry').removeClass('hidden')
+      })
+
+      $('.fragment-entry button').click(function() {
+        document.location.hash = $('#fragment').val()
+        Twitch._config.params = Twitch._parseFragment();
+        if (Twitch.getStatus().authenticated) {
+          Twitch.log('Authenticated!')
+          $('h2, div.authenticated').show();
+
+          $('span.token').text(Twitch.getStatus().token);
+          $('#test-token').addClass('pass')
+
+          Twitch.request({method: 'user'}, function(err, user) {
+            $('.name').text(user.display_name)
+            $('#test-name').addClass('pass')
+          });
+
+          Twitch.request({method: 'channel'}, function(err, user) {
+            $('.key').text(user.stream_key)
+            $('#test-stream-key').addClass('pass')
+          });
+        } else {
+          Twitch.log('unauthed :(')
+        }
+      })
+    });
+  </script>
+
+  <style type="text/css">
+  .hidden {
+    display: none;
+  }
+  .test.pass::before {
+    content: '✓';
+    font-size: 12px;
+    display: block;
+    float: left;
+    margin-right: 5px;
+    color: #00c41c;
+  }
+  </style>
+</head>
+<body>
+  <h1>TwitchTV SDK Integration Test</h1>
+    <div class="authenticate">
+      1. Connect: 
+      <img src="http://ttv-api.s3.amazonaws.com/twitch_connect.png" class="twitch-connect" href="#" />
+    </div>
+
+    <div class="fragment-entry hidden">
+      <label>Enter your document fragment:</label>
+      <input id="fragment" size="40"></input>
+      <button>Parse!</button>
+    </div>
+
+    <h2 class="authenticated hidden">Authentication</h2>
+    <div class="authenticated hidden">
+      <p id="test-token" class="test">
+        You are using token
+        <span class="token">[no token]</span>.
+      </p>
+
+      <p id="test-name" class="test">
+        Your TwitchTV Name is
+        <span class="name">[Loading Name...]</span>.
+      </p>
+
+      <p id="test-stream-key" class="test">
+        Your TwitchTV stream key is
+        <span class="key">[Loading Stream Key...]</span>.
+      </p>
+
+    </div>
+</body>
+</html>
