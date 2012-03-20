@@ -36,6 +36,15 @@ describe('OAuth 2', function() {
     });
   });
 
+  describe('#getStatus()', function() {
+    it('should have the correct structure', function() {
+      var status = Twitch.getStatus(),
+        props = ['token', 'scope', 'error', 'errorDescription'];
+      for (var i = 0, len = props.length; i < len; i++) {
+        status.should.have.property(props[i]);
+      }
+    });
+  });
 
   describe('#login()', function() {
     beforeEach(function() {

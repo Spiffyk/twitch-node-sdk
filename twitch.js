@@ -104,6 +104,7 @@
     return {
       authenticated: !!Twitch._config.params.token,
       token: Twitch._config.params.token,
+      scope: Twitch._config.params.scope,
       error: Twitch._config.params.error,
       errorDescription: Twitch._config.params.errorDescription
     };
