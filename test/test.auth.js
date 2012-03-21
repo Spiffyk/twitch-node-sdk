@@ -1,5 +1,5 @@
 /*jshint expr:true*/
-describe('OAuth 2', function() {
+describe('Authentication', function() {
   describe('#_parseFragment()', function() {
     it('should extract params from location hash', function() {
       var hash = "access_token=ew35h4pk0xg7iy1" +
@@ -37,9 +37,17 @@ describe('OAuth 2', function() {
   });
 
   describe('#getStatus()', function() {
+    it('should ensure init has been called', function() {
+      (function() {
+        Twitch.getStatus();
+      }).should['throw']('init() before getStatus()');
+    });
+
     it('should have the correct structure', function() {
+      Twitch.init({clientId: 'myclientid'});
       var status = Twitch.getStatus(),
-        props = ['token', 'scope', 'error', 'errorDescription'];
+        props = ['authenticated', 'token', 'scope', 'error', 'errorDescription'];
+
       for (var i = 0, len = props.length; i < len; i++) {
         status.should.have.property(props[i]);
       }
@@ -65,7 +73,7 @@ describe('OAuth 2', function() {
           popup: false,
           scope: []
         });
-      }).should['throw']('init before login');
+      }).should['throw']('init() before login()');
     });
 
     it('should enforce arguments', function() {
@@ -115,5 +123,20 @@ describe('OAuth 2', function() {
       });
       lastShouldMatch('response_type=token&client_id=myclientid&redirect_uri=http%3A%2F%2Fmyappurl.net&scope=user_read+channel_read');
     });
+  });
+
+  describe('#initSession()', function() {
+    it('TODO: should set session', function() {
+    });
+
+    it('TODO: should handle invalid json', function() {
+    });
+
+    it('TODO: should handle missing window.JSON', function() {
+    });
+
+    it('TODO: should set new session if this page is a redirect_uri', function() {
+    });
+
   });
 });

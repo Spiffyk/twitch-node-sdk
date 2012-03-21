@@ -9,7 +9,7 @@
 ### Example
 Check out the [example implemention][]
 
-[example implementation]: http://hebo.github.com/twitch-sdk/example.html
+[example implemention]: http://hebo.github.com/twitch-sdk/example.html
 
 ## Authentication
 The TwitchTV JavaScript SDK enables your users to log on or register using their TwitchTV accounts. The SDK handles synchronizing state between your site and TwitchTV, so users will stay logged in to your app so long as they have a valid access token.

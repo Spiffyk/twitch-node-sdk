@@ -211,6 +211,9 @@
   };
 
   var getStatus = function() {
+    if (!Twitch._config.session) {
+      throw new Error('You must call init() before getStatus()');
+    }
     // TODO: force update parameter
     return {
       authenticated: !!Twitch._config.session.token,
@@ -243,7 +246,7 @@
     };
 
     if (!params.client_id) {
-      throw new Error('You must call init before login');
+      throw new Error('You must call init() before login()');
     }
     
     var url = Twitch.baseUrl + 'oauth2/authorize?' + $.param(params);
@@ -281,6 +284,8 @@
     if (document.location.hash.match(/access_token=(\w+)/)) {
       Twitch._config.session = parseFragment();
 
+      // Persist to session storage on browsers that support it,
+      // cookies otherwise
       if (window.JSON) {
         Twitch._storage.setItem(sessionKey, JSON.stringify(Twitch._config.session));
       }
@@ -289,6 +294,7 @@
 
   Twitch.extend({
     _initSession: initSession,
+    _parseFragment: parseFragment,
     getStatus: getStatus,
     login: login
   });
