@@ -24,7 +24,7 @@
 
       $('.fragment-entry button').click(function() {
         document.location.hash = $('#fragment').val()
-        Twitch._config.params = Twitch._parseFragment();
+        Twitch._initSession();
         if (Twitch.getStatus().authenticated) {
           Twitch.log('Authenticated!')
           $('h2, div.authenticated').show();
