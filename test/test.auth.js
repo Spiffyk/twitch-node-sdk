@@ -37,20 +37,54 @@ describe('Authentication', function() {
   });
 
   describe('#getStatus()', function() {
+    beforeEach(function() {
+      sinon.stub(Twitch, 'request');
+    });
+
+    afterEach(function() {
+      Twitch.request.restore();
+    });
+
+
     it('should ensure init has been called', function() {
       (function() {
         Twitch.getStatus();
       }).should['throw']('init() before getStatus()');
     });
 
-    it('should have the correct structure', function() {
+    it('should have the correct structure', function(done) {
       Twitch.init({clientId: 'myclientid'});
-      var status = Twitch.getStatus(),
-        props = ['authenticated', 'token', 'scope', 'error', 'errorDescription'];
+      var props = ['authenticated', 'token', 'scope', 'error', 'errorDescription'];
 
-      for (var i = 0, len = props.length; i < len; i++) {
-        status.should.have.property(props[i]);
-      }
+      Twitch.getStatus(function(err, status) {
+        should.not.exist(err);
+        for (var i = 0, len = props.length; i < len; i++) {
+          status.should.have.property(props[i]);
+        }
+        done();
+      });
+    });
+
+    it('handles forced updates', function(done) {
+      Twitch.init({clientId: 'myclientid'});
+
+      Twitch.request.yields(null, {
+        token: {
+          valid: true
+        }
+      });
+
+      var props = ['authenticated', 'token', 'scope', 'error', 'errorDescription'];
+      Twitch.getStatus({force: true}, function(err, status) {
+        should.not.exist(err);
+        for (var i = 0, len = props.length; i < len; i++) {
+          status.should.have.property(props[i]);
+        }
+
+        sinon.assert.calledWith(Twitch.request, {method: '/'});
+
+        done();
+      });
     });
   });
 

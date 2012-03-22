@@ -16,10 +16,12 @@
   // served by using a related high-level function
   Twitch.request = function(options, callback) {
     params = options.params || {};
-    var status = Twitch.getStatus(),
+    callback = callback || function() {};
+
+    var authenticated = !!Twitch._config.session.token,
       url = Twitch.baseUrl + options.method;
 
-    if (status.authenticated) {
+    if (authenticated) {
       params.oauth_token = Twitch._config.session.token;
     }
 
@@ -29,7 +31,7 @@
       timeout : requestTimeout
     })
     .done(function(data) {
-      console.log('suvvess');
+      console.log('Response Data:');
       console.log(data);
       callback(null, data);
     })
@@ -187,7 +189,9 @@
   Twitch.extend({
     init: init
   });
-})();(function() {
+})();/*jshint expr:true*/
+(function() {
+  var SESSION_KEY = 'twitch_oauth_session';
   var parseFragment = function(hash) {
     var match,
       session;
@@ -210,18 +214,62 @@
     return session;
   };
 
-  var getStatus = function() {
+  // Update session info from API and store
+  var updateSession = function(callback) {
+    Twitch.request({method: '/'}, function(err, response) {
+      var session;
+      if (err) {
+        Twitch.log('error encountered updating session:', err);
+        callback(err, null);
+        return;
+      }
+
+      if (!response.token.valid) {
+        // Invalid token. Clear our stored data
+        session = {};
+        Twitch._config.session = session;
+        window.JSON && Twitch._storage.setItem(SESSION_KEY, JSON.stringify(session));
+        // TODO: emit changed event
+      }
+
+      if (typeof callback === 'function') {
+        callback(null, session);
+      }
+    });
+  };
+
+  // Get the current authentication status. Will try to use the stored session
+  // if possible for speed.
+  // The 'force' property will trigger an API request to update session data.
+  var getStatus = function(options, callback) {
+    if (typeof options === 'function') {
+        callback = options;
+    }
+    if (typeof callback !== 'function') {
+        callback = function() {};
+    }
     if (!Twitch._config.session) {
       throw new Error('You must call init() before getStatus()');
     }
-    // TODO: force update parameter
-    return {
-      authenticated: !!Twitch._config.session.token,
-      token: Twitch._config.session.token,
-      scope: Twitch._config.session.scope,
-      error: Twitch._config.session.error,
-      errorDescription: Twitch._config.session.errorDescription
+
+    var makeSession = function(session) {
+      // Make a new session object for rendering to the user
+      return {
+        authenticated: !!session.token,
+        token: session.token,
+        scope: session.scope,
+        error: session.error,
+        errorDescription: session.errorDescription
+      };
     };
+
+    if (options && options.force) {
+      updateSession(function(err, session) {
+        callback(err, makeSession(session || Twitch._config.session));
+      });
+    } else {
+      callback(null, makeSession(Twitch._config.session));
+    }
   };
 
   // Login and redirect back to current page with an access token
@@ -263,14 +311,13 @@
   // Retrieve sessions from persistent storage and
   // persist new sessions.
   var initSession = function() {
-    var storedSession,
-      sessionKey = 'twitch_oauth_session';
+    var storedSession;
 
     Twitch._config.session = {};
     // Retrieve sessions from persistent storage and
     // persist new sessions.
     if (window.JSON) {
-      storedSession = Twitch._storage.getItem(sessionKey);
+      storedSession = Twitch._storage.getItem(SESSION_KEY);
       if (storedSession) {
         try {
           Twitch._config.session = JSON.parse(storedSession);
@@ -287,7 +334,7 @@
       // Persist to session storage on browsers that support it,
       // cookies otherwise
       if (window.JSON) {
-        Twitch._storage.setItem(sessionKey, JSON.stringify(Twitch._config.session));
+        Twitch._storage.setItem(SESSION_KEY, JSON.stringify(Twitch._config.session));
       }
     }
   };

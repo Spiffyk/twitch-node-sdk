@@ -26,3 +26,23 @@ The TwitchTV JavaScript SDK enables your users to log on or register using their
     });
 
     TODO: args list, scopes, popups for advanced functionality
+
+### Twitch.getStatus
+
+Allows you to get the current login status of a user. Whenever possible, `getStatus` will try to use the stored session for speed. You can force `getStatus` to check the stored session against the API if needed.
+
+#### Usage
+
+    Twitch.getStatus(function(err, status) {
+      if (status.authenticated) {
+        console.log('authenticated!')
+      }
+    }
+
+Force an update of the status:
+
+    Twitch.getStatus({force: true}, function(err, status) {
+      if (status.authenticated) {
+        console.log('authenticated!')
+      }
+    }

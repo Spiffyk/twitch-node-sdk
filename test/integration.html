@@ -25,25 +25,28 @@
       $('.fragment-entry button').click(function() {
         document.location.hash = $('#fragment').val()
         Twitch._initSession();
-        if (Twitch.getStatus().authenticated) {
-          Twitch.log('Authenticated!')
-          $('h2, div.authenticated').show();
 
-          $('span.token').text(Twitch.getStatus().token);
-          $('#test-token').addClass('pass')
+        Twitch.getStatus(function(err, status) {
+          if (status.authenticated) {
+            Twitch.log('Authenticated!')
+            $('h2, div.authenticated').show();
 
-          Twitch.request({method: 'user'}, function(err, user) {
-            $('.name').text(user.display_name)
-            $('#test-name').addClass('pass')
-          });
+            $('span.token').text(status.token);
+            $('#test-token').addClass('pass')
 
-          Twitch.request({method: 'channel'}, function(err, user) {
-            $('.key').text(user.stream_key)
-            $('#test-stream-key').addClass('pass')
-          });
-        } else {
-          Twitch.log('unauthed :(')
-        }
+            Twitch.request({method: 'user'}, function(err, user) {
+              $('.name').text(user.display_name)
+              $('#test-name').addClass('pass')
+            });
+
+            Twitch.request({method: 'channel'}, function(err, user) {
+              $('.key').text(user.stream_key)
+              $('#test-stream-key').addClass('pass')
+            });
+          } else {
+            Twitch.log('unauthed :(')
+          }
+        });
       })
     });
   </script>
