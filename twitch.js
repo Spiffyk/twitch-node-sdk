@@ -11,10 +11,10 @@
     }
   };
 
-  // Make requests to the TwitchTV api. This is
-  // a low-level interface--most clients are better
-  // served by using a related high-level function
-  Twitch.request = function(options, callback) {
+  // Make requests to the TwitchTV API. This is a fairly low-level
+  // interface--most clients are better served by using a related
+  // high-level function if one exists
+  Twitch.api = function(options, callback) {
     params = options.params || {};
     callback = callback || function() {};
 
@@ -216,7 +216,7 @@
 
   // Update session info from API and store
   var updateSession = function(callback) {
-    Twitch.request({method: '/'}, function(err, response) {
+    Twitch.api({method: '/'}, function(err, response) {
       var session;
       if (err) {
         Twitch.log('error encountered updating session:', err);

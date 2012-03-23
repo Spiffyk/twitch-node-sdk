@@ -34,12 +34,12 @@
             $('span.token').text(status.token);
             $('#test-token').addClass('pass')
 
-            Twitch.request({method: 'user'}, function(err, user) {
+            Twitch.api({method: 'user'}, function(err, user) {
               $('.name').text(user.display_name)
               $('#test-name').addClass('pass')
             });
 
-            Twitch.request({method: 'channel'}, function(err, user) {
+            Twitch.api({method: 'channel'}, function(err, user) {
               $('.key').text(user.stream_key)
               $('#test-stream-key').addClass('pass')
             });

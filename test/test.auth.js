@@ -38,11 +38,11 @@ describe('Authentication', function() {
 
   describe('#getStatus()', function() {
     beforeEach(function() {
-      sinon.stub(Twitch, 'request');
+      sinon.stub(Twitch, 'api');
     });
 
     afterEach(function() {
-      Twitch.request.restore();
+      Twitch.api.restore();
     });
 
 
@@ -68,7 +68,7 @@ describe('Authentication', function() {
     it('handles forced updates', function(done) {
       Twitch.init({clientId: 'myclientid'});
 
-      Twitch.request.yields(null, {
+      Twitch.api.yields(null, {
         token: {
           valid: true
         }
@@ -81,7 +81,7 @@ describe('Authentication', function() {
           status.should.have.property(props[i]);
         }
 
-        sinon.assert.calledWith(Twitch.request, {method: '/'});
+        sinon.assert.calledWith(Twitch.api, {method: '/'});
 
         done();
       });
