@@ -1,5 +1,9 @@
 /*jshint expr:true*/
-describe('Init', function() {
+describe('Initialization', function() {
+  after(function() {
+    Twitch._config = {};
+  });
+
   describe('#_init()', function() {
     beforeEach(function(){
       Twitch._config = {};

@@ -18,6 +18,8 @@ The TwitchTV JavaScript SDK enables your users to log on or register using their
 
 Log in a user or request additional permissions. By default, the user will be directed to the TwitchTV sign in/approve page, then back to the same page. This page must be the redirect_uri you specified when creating the client. You may customize the redirect_uri if the user is currently on a different page.
 
+TODO: button code/images
+
 #### Usage
 
     Twitch.login({
