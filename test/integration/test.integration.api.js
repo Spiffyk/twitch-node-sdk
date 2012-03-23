@@ -46,5 +46,19 @@ describe('API', function() {
         });
       });
     });
+
+    describe('responses', function() {
+      it('TODO: handle nonexistent response', function(done) {
+        done();
+        // Twitch.api({method: 'fakeresource'}, function(err, channel) {
+        // });
+      });
+
+      it('TODO: handle unauthorized response', function(done) {
+        done();
+        // Twitch.api({method: 'unauthorized'}, function(err, channel) {
+        // });
+      });
+    });
   });
 });

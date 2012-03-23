@@ -5,6 +5,23 @@
 
 ## Loading
 
+To integrate the TwitchTV JavaScript SDK on your site, follow these steps:
+
+First, register a [new client application](). Record the **Client Id** and **Client Secret** you receive in a safe place.
+
+To load and initialize the SDK, add the following code to your page, filling in the Client Id of your app:
+
+    <script src="https://raw.github.com/Hebo/twitch-sdk/master/twitch.js?login=Hebo&token=cedd499f33d7080fa720e65f767e635d"></script>
+
+    <script>
+      Twitch.init({clientId: 'YOUR_CLIENT_ID_HERE'}, function(error) {
+        // the sdk is now loaded
+      });
+    </script>
+
+You can now perform actions that do not require authorization, or have your users log in to TwitchTV for additional permissions
+
+**TODO**: login guide
 
 ### Example
 Check out the [example implemention][]
@@ -12,7 +29,7 @@ Check out the [example implemention][]
 [example implemention]: http://hebo.github.com/twitch-sdk/example.html
 
 ## Authentication
-The TwitchTV JavaScript SDK enables your users to log on or register using their TwitchTV accounts. The SDK handles synchronizing state between your site and TwitchTV, so users will stay logged in to your app so long as they have a valid access token.
+The TwitchTV JavaScript SDK enables your users to log on or register using their TwitchTV accounts. The SDK handles synchronizing state between your site and TwitchTV, so users will stay logged in to your app as long as they have a valid access token.
 
 ### Twitch.login
 
@@ -58,6 +75,8 @@ Make direct requests to the [TwitchTV API][] on behalf of your users. This metho
 
 #### Usage
 
-Get the logged-in user's stream key:
+Get the logged-in user's channel stream key:
 
-    //TODO
+    Twitch.api({method: 'channel'}, function(error, channel) {
+      console.log(channel.stream_key);
+    });
