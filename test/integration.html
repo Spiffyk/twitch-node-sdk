@@ -3,9 +3,27 @@
   <meta charset="utf-8">
   <meta http-equiv="Cache-control" content="no-cache">
   <title>TwitchTV SDK Integration Test</title>
+  <link rel="stylesheet" href="../node_modules/mocha/mocha.css" />
   <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+  <script src="../node_modules/mocha/mocha.js"></script>
+  <script src="../node_modules/chai/chai.js"></script>
+  <script src="../node_modules/sinon/lib/sinon.js"></script>
+  <script src="../node_modules/sinon/lib/sinon/spy.js"></script>
+  <script src="../node_modules/sinon/lib/sinon/stub.js"></script>
+  <script src="../node_modules/sinon/lib/sinon/mock.js"></script>
+  <script src="../node_modules/sinon/lib/sinon/assert.js"></script>
+
+  <script>
+    var should = chai.should();
+    mocha.setup({
+      ui: 'bdd',
+      globals: ['Twitch'],
+      ignoreLeaks: true
+    });
+  </script>
 
   <script src="../twitch.js"></script>
+  <script src="integration/test.integration.api.js"></script>
 
   <script>
     window.CLIENT_ID = '3yaddo7bisin8sczj9l1l1dyh';
@@ -24,29 +42,9 @@
 
       $('.fragment-entry button').click(function() {
         document.location.hash = $('#fragment').val()
+
         Twitch._initSession();
-
-        Twitch.getStatus(function(err, status) {
-          if (status.authenticated) {
-            Twitch.log('Authenticated!')
-            $('h2, div.authenticated').show();
-
-            $('span.token').text(status.token);
-            $('#test-token').addClass('pass')
-
-            Twitch.api({method: 'user'}, function(err, user) {
-              $('.name').text(user.display_name)
-              $('#test-name').addClass('pass')
-            });
-
-            Twitch.api({method: 'channel'}, function(err, user) {
-              $('.key').text(user.stream_key)
-              $('#test-stream-key').addClass('pass')
-            });
-          } else {
-            Twitch.log('unauthed :(')
-          }
-        });
+        mocha.run();
       })
     });
   </script>
@@ -86,23 +84,6 @@
       <button>Parse!</button>
     </div>
 
-    <h2 class="authenticated hidden">Authentication</h2>
-    <div class="authenticated hidden">
-      <p id="test-token" class="test">
-        You are using token
-        <span class="token">[no token]</span>.
-      </p>
-
-      <p id="test-name" class="test">
-        Your TwitchTV Name is
-        <span class="name">[Loading Name...]</span>.
-      </p>
-
-      <p id="test-stream-key" class="test">
-        Your TwitchTV stream key is
-        <span class="key">[Loading Stream Key...]</span>.
-      </p>
-
-    </div>
+    <div id="mocha"></div>
 </body>
 </html>

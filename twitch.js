@@ -13,7 +13,7 @@
   // interface--most clients are better served by using a related
   // high-level function if one exists
   Twitch.api = function(options, callback) {
-    params = options.params || {};
+    var params = options.params || {};
     callback = callback || function() {};
 
     var authenticated = !!Twitch._config.session.token,
