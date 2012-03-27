@@ -80,3 +80,15 @@ Get the logged-in user's channel stream key:
     Twitch.api({method: 'channel'}, function(error, channel) {
       console.log(channel.stream_key);
     });
+
+#### Development
+
+Tests:
+
+    make test
+
+Docs:
+
+Install pygments as described [here](https://github.com/mojombo/jekyll/wiki/install)
+
+   make docs

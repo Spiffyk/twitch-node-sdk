@@ -7,8 +7,11 @@ SRC = lib/twitch.core.js \
 
 all: twitch.min.js
 
-test:
+test: twitch.js
 	open test/index.html
+
+docs: twitch.js
+	$(NODE_BIN)docco twitch.js
 
 twitch.js: $(SRC)
 	cat $^ > $@
@@ -19,4 +22,4 @@ twitch.min.js: twitch.js
 clean:
 	rm -f twitch{,.min}.js
 
-.PHONY: test
+.PHONY: test docs

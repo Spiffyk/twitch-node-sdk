@@ -1,0 +1,312 @@
+<!DOCTYPE html>  <html> <head>   <title>twitch.js</title>   <meta http-equiv="content-type" content="text/html; charset=UTF-8">   <link rel="stylesheet" media="all" href="docco.css" /> </head> <body>   <div id="container">     <div id="background"></div>          <table cellpadding="0" cellspacing="0">       <thead>         <tr>           <th class="docs">             <h1>               twitch.js             </h1>           </th>           <th class="code">           </th>         </tr>       </thead>       <tbody>                               <tr id="section-1">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-1">&#182;</a>               </div>               <h2>Core</h2>             </td>             <td class="code">               <div class="highlight"><pre><span class="p">;(</span><span class="kd">function</span><span class="p">(</span><span class="nx">$</span><span class="p">)</span> <span class="p">{</span></pre></div>             </td>           </tr>                               <tr id="section-2">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-2">&#182;</a>               </div>               <p>Wait five seconds for the API request before timing out.</p>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="kd">var</span> <span class="nx">REQUEST_TIMEOUT</span> <span class="o">=</span> <span class="mi">5000</span><span class="p">;</span>
+
+  <span class="kd">var</span> <span class="nx">Twitch</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="nx">baseUrl</span><span class="o">:</span> <span class="s1">&#39;http://beta.twitch.tv/kraken/&#39;</span><span class="p">,</span>
+    <span class="nx">_config</span><span class="o">:</span> <span class="p">{},</span>
+    <span class="nx">extend</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">src</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">$</span><span class="p">.</span><span class="nx">extend</span><span class="p">(</span><span class="nx">Twitch</span><span class="p">,</span> <span class="nx">src</span><span class="p">);</span>
+    <span class="p">}</span>
+  <span class="p">};</span></pre></div>             </td>           </tr>                               <tr id="section-3">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-3">&#182;</a>               </div>               <p>Perform requests to the TwitchTV API. This is a fairly low-level
+interface, so most clients are better served by using a related
+high-level function if one exists.</p>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="nx">Twitch</span><span class="p">.</span><span class="nx">api</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">options</span><span class="p">,</span> <span class="nx">callback</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">params</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">params</span> <span class="o">||</span> <span class="p">{};</span>
+    <span class="nx">callback</span> <span class="o">=</span> <span class="nx">callback</span> <span class="o">||</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{};</span>
+
+    <span class="kd">var</span> <span class="nx">authenticated</span> <span class="o">=</span> <span class="o">!!</span><span class="nx">Twitch</span><span class="p">.</span><span class="nx">_config</span><span class="p">.</span><span class="nx">session</span><span class="p">.</span><span class="nx">token</span><span class="p">,</span>
+      <span class="nx">url</span> <span class="o">=</span> <span class="nx">Twitch</span><span class="p">.</span><span class="nx">baseUrl</span> <span class="o">+</span> <span class="nx">options</span><span class="p">.</span><span class="nx">method</span><span class="p">;</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="nx">authenticated</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">params</span><span class="p">.</span><span class="nx">oauth_token</span> <span class="o">=</span> <span class="nx">Twitch</span><span class="p">.</span><span class="nx">_config</span><span class="p">.</span><span class="nx">session</span><span class="p">.</span><span class="nx">token</span><span class="p">;</span>
+    <span class="p">}</span></pre></div>             </td>           </tr>                               <tr id="section-4">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-4">&#182;</a>               </div>               <p>When using JSONP, any error response will have a
+<code>200</code> HTTP status code with the actual code in the body
+so we can parse them.</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="nx">$</span><span class="p">.</span><span class="nx">ajax</span><span class="p">({</span>
+      <span class="nx">url</span><span class="o">:</span> <span class="nx">url</span> <span class="o">+</span> <span class="s1">&#39;?&#39;</span> <span class="o">+</span> <span class="nx">$</span><span class="p">.</span><span class="nx">param</span><span class="p">(</span><span class="nx">params</span><span class="p">),</span>
+      <span class="nx">dataType</span><span class="o">:</span> <span class="s1">&#39;jsonp&#39;</span><span class="p">,</span>
+      <span class="nx">timeout</span> <span class="o">:</span> <span class="nx">REQUEST_TIMEOUT</span>
+    <span class="p">})</span>
+    <span class="p">.</span><span class="nx">done</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Response Data:&#39;</span><span class="p">);</span>
+      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">data</span><span class="p">);</span>
+      <span class="nx">callback</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="nx">data</span><span class="p">);</span>
+    <span class="p">})</span>
+    <span class="p">.</span><span class="nx">fail</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span></pre></div>             </td>           </tr>                               <tr id="section-5">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-5">&#182;</a>               </div>               <p>Forced fail by request timeout; we have no
+way of knowing the actual error with JSONP.</p>             </td>             <td class="code">               <div class="highlight"><pre>      <span class="nx">callback</span><span class="p">(</span><span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s1">&#39;Request Timeout&#39;</span><span class="p">),</span> <span class="kc">null</span><span class="p">);</span>
+    <span class="p">});</span>
+  <span class="p">};</span>
+
+  <span class="nx">Twitch</span><span class="p">.</span><span class="nx">log</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">message</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nb">window</span><span class="p">.</span><span class="nx">console</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="nx">console</span><span class="p">,</span> <span class="nx">arguments</span><span class="p">);</span>
+    <span class="p">}</span>
+  <span class="p">};</span>
+
+  <span class="nb">window</span><span class="p">.</span><span class="nx">Twitch</span> <span class="o">=</span> <span class="nx">Twitch</span><span class="p">;</span></pre></div>             </td>           </tr>                               <tr id="section-6">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-6">&#182;</a>               </div>               <p>Support either <a href="http://jquery.com">jQuery</a> or <a href="http://zeptojs.com">Zepto</a></p>             </td>             <td class="code">               <div class="highlight"><pre><span class="p">})(</span><span class="nb">window</span><span class="p">.</span><span class="nx">jQuery</span> <span class="o">||</span> <span class="nb">window</span><span class="p">.</span><span class="nx">Zepto</span><span class="p">);</span></pre></div>             </td>           </tr>                               <tr id="section-7">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-7">&#182;</a>               </div>               <h2>Storage</h2>
+
+<p>Persistence layer for the SDK on top of sessionStorage, with
+a cookie fallback for older browsers.</p>             </td>             <td class="code">               <div class="highlight"><pre><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span></pre></div>             </td>           </tr>                               <tr id="section-8">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-8">&#182;</a>               </div>               <p>Adapted from remy's <a href="https://gist.github.com/350433">DOM storage polyfill</a>.</p>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="kd">var</span> <span class="nx">store</span> <span class="o">=</span> <span class="nb">window</span><span class="p">.</span><span class="nx">sessionStorage</span><span class="p">;</span>
+
+  <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">store</span><span class="p">)</span> <span class="p">{</span>
+    <span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+      <span class="kd">var</span> <span class="nx">Storage</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">type</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">function</span> <span class="nx">createCookie</span><span class="p">(</span><span class="nx">name</span><span class="p">,</span> <span class="nx">value</span><span class="p">,</span> <span class="nx">days</span><span class="p">)</span> <span class="p">{</span>
+          <span class="kd">var</span> <span class="nx">date</span><span class="p">,</span> <span class="nx">expires</span><span class="p">;</span>
+
+          <span class="k">if</span> <span class="p">(</span><span class="nx">days</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">date</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">();</span>
+            <span class="nx">date</span><span class="p">.</span><span class="nx">setTime</span><span class="p">(</span><span class="nx">date</span><span class="p">.</span><span class="nx">getTime</span><span class="p">()</span><span class="o">+</span><span class="p">(</span><span class="nx">days</span><span class="o">*</span><span class="mi">24</span><span class="o">*</span><span class="mi">60</span><span class="o">*</span><span class="mi">60</span><span class="o">*</span><span class="mi">1000</span><span class="p">));</span>
+            <span class="nx">expires</span> <span class="o">=</span> <span class="s2">&quot;; expires=&quot;</span><span class="o">+</span><span class="nx">date</span><span class="p">.</span><span class="nx">toGMTString</span><span class="p">();</span>
+          <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="nx">expires</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">;</span>
+          <span class="p">}</span>
+          <span class="nb">document</span><span class="p">.</span><span class="nx">cookie</span> <span class="o">=</span> <span class="nx">name</span><span class="o">+</span><span class="s2">&quot;=&quot;</span><span class="o">+</span><span class="nx">value</span><span class="o">+</span><span class="nx">expires</span><span class="o">+</span><span class="s2">&quot;; path=/&quot;</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="kd">function</span> <span class="nx">readCookie</span><span class="p">(</span><span class="nx">name</span><span class="p">)</span> <span class="p">{</span>
+          <span class="kd">var</span> <span class="nx">nameEQ</span> <span class="o">=</span> <span class="nx">name</span> <span class="o">+</span> <span class="s2">&quot;=&quot;</span><span class="p">,</span>
+              <span class="nx">ca</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">cookie</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="s1">&#39;;&#39;</span><span class="p">),</span>
+              <span class="nx">i</span><span class="p">,</span> <span class="nx">c</span><span class="p">;</span>
+
+          <span class="k">for</span> <span class="p">(</span><span class="nx">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">ca</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">c</span> <span class="o">=</span> <span class="nx">ca</span><span class="p">[</span><span class="nx">i</span><span class="p">];</span>
+            <span class="k">while</span> <span class="p">(</span><span class="nx">c</span><span class="p">.</span><span class="nx">charAt</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">==</span><span class="s1">&#39; &#39;</span><span class="p">)</span> <span class="p">{</span>
+              <span class="nx">c</span> <span class="o">=</span> <span class="nx">c</span><span class="p">.</span><span class="nx">substring</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="nx">c</span><span class="p">.</span><span class="nx">length</span><span class="p">);</span>
+            <span class="p">}</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="nx">c</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="nx">nameEQ</span><span class="p">)</span> <span class="o">===</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+              <span class="k">return</span> <span class="nx">c</span><span class="p">.</span><span class="nx">substring</span><span class="p">(</span><span class="nx">nameEQ</span><span class="p">.</span><span class="nx">length</span><span class="p">,</span><span class="nx">c</span><span class="p">.</span><span class="nx">length</span><span class="p">);</span>
+            <span class="p">}</span>
+          <span class="p">}</span>
+          <span class="k">return</span> <span class="kc">null</span><span class="p">;</span>
+        <span class="p">}</span>
+        
+        <span class="kd">function</span> <span class="nx">setData</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+          <span class="nx">data</span> <span class="o">=</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">data</span><span class="p">);</span>
+          <span class="k">if</span> <span class="p">(</span><span class="nx">type</span> <span class="o">==</span> <span class="s1">&#39;session&#39;</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nb">window</span><span class="p">.</span><span class="nx">name</span> <span class="o">=</span> <span class="nx">data</span><span class="p">;</span>
+          <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="nx">createCookie</span><span class="p">(</span><span class="s1">&#39;localStorage&#39;</span><span class="p">,</span> <span class="nx">data</span><span class="p">,</span> <span class="mi">365</span><span class="p">);</span>
+          <span class="p">}</span>
+        <span class="p">}</span>
+        
+        <span class="kd">function</span> <span class="nx">clearData</span><span class="p">()</span> <span class="p">{</span>
+          <span class="k">if</span> <span class="p">(</span><span class="nx">type</span> <span class="o">==</span> <span class="s1">&#39;session&#39;</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nb">window</span><span class="p">.</span><span class="nx">name</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">;</span>
+          <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="nx">createCookie</span><span class="p">(</span><span class="s1">&#39;localStorage&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="mi">365</span><span class="p">);</span>
+          <span class="p">}</span>
+        <span class="p">}</span>
+        
+        <span class="kd">function</span> <span class="nx">getData</span><span class="p">()</span> <span class="p">{</span>
+          <span class="kd">var</span> <span class="nx">data</span> <span class="o">=</span> <span class="nx">type</span> <span class="o">==</span> <span class="s1">&#39;session&#39;</span> <span class="o">?</span> <span class="nb">window</span><span class="p">.</span><span class="nx">name</span> <span class="o">:</span> <span class="nx">readCookie</span><span class="p">(</span><span class="s1">&#39;localStorage&#39;</span><span class="p">);</span>
+          <span class="k">return</span> <span class="nx">data</span> <span class="o">?</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="o">:</span> <span class="p">{};</span>
+        <span class="p">}</span></pre></div>             </td>           </tr>                               <tr id="section-9">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-9">&#182;</a>               </div>               <p>initialise if there's already data</p>             </td>             <td class="code">               <div class="highlight"><pre>        <span class="kd">var</span> <span class="nx">data</span> <span class="o">=</span> <span class="nx">getData</span><span class="p">();</span>
+
+        <span class="k">return</span> <span class="p">{</span>
+          <span class="nx">length</span><span class="o">:</span> <span class="mi">0</span><span class="p">,</span>
+          <span class="nx">clear</span><span class="o">:</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+            <span class="nx">data</span> <span class="o">=</span> <span class="p">{};</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">length</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+            <span class="nx">clearData</span><span class="p">();</span>
+          <span class="p">},</span>
+          <span class="nx">getItem</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">key</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="nx">data</span><span class="p">[</span><span class="nx">key</span><span class="p">]</span> <span class="o">===</span> <span class="kc">undefined</span> <span class="o">?</span> <span class="kc">null</span> <span class="o">:</span> <span class="nx">data</span><span class="p">[</span><span class="nx">key</span><span class="p">];</span>
+          <span class="p">},</span>
+          <span class="nx">key</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">i</span><span class="p">)</span> <span class="p">{</span></pre></div>             </td>           </tr>                               <tr id="section-10">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-10">&#182;</a>               </div>               <p>not perfect, but works</p>             </td>             <td class="code">               <div class="highlight"><pre>            <span class="kd">var</span> <span class="nx">ctr</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">k</span> <span class="k">in</span> <span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+              <span class="k">if</span> <span class="p">(</span><span class="nx">ctr</span> <span class="o">==</span> <span class="nx">i</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">return</span> <span class="nx">k</span><span class="p">;</span>
+              <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+                <span class="nx">ctr</span><span class="o">++</span><span class="p">;</span>
+              <span class="p">}</span>
+            <span class="p">}</span>
+            <span class="k">return</span> <span class="kc">null</span><span class="p">;</span>
+          <span class="p">},</span>
+          <span class="nx">removeItem</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">key</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">delete</span> <span class="nx">data</span><span class="p">[</span><span class="nx">key</span><span class="p">];</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">length</span><span class="o">--</span><span class="p">;</span>
+            <span class="nx">setData</span><span class="p">(</span><span class="nx">data</span><span class="p">);</span>
+          <span class="p">},</span>
+          <span class="nx">setItem</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">key</span><span class="p">,</span> <span class="nx">value</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">data</span><span class="p">[</span><span class="nx">key</span><span class="p">]</span> <span class="o">=</span> <span class="nx">value</span><span class="o">+</span><span class="s1">&#39;&#39;</span><span class="p">;</span> <span class="c1">// forces the value to a string</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">length</span><span class="o">++</span><span class="p">;</span>
+            <span class="nx">setData</span><span class="p">(</span><span class="nx">data</span><span class="p">);</span>
+          <span class="p">}</span>
+        <span class="p">};</span>
+      <span class="p">};</span>
+
+      <span class="nx">store</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Storage</span><span class="p">(</span><span class="s1">&#39;session&#39;</span><span class="p">);</span>
+    <span class="p">})();</span>
+  <span class="p">}</span>
+
+  <span class="nx">Twitch</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
+    <span class="nx">_storage</span><span class="o">:</span> <span class="nx">store</span>
+  <span class="p">});</span>
+
+<span class="p">})();</span></pre></div>             </td>           </tr>                               <tr id="section-11">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-11">&#182;</a>               </div>               <h2>Initialization</h2>             </td>             <td class="code">               <div class="highlight"><pre><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span></pre></div>             </td>           </tr>                               <tr id="section-12">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-12">&#182;</a>               </div>               <p>Initialize the library.</p>
+
+<p>Accepts an options object specifying
+your appplication's <strong>client id</strong>, recieved after
+app creation on TwitchTV.</p>
+
+<p>Typical initialization:</p>
+
+<pre><code>&lt;script&gt;
+Twitch.init({
+  clientId: YOUR_CLIENT_ID
+}, function() {
+  console.log('the library is now loaded')
+});
+&lt;/script&gt;
+</code></pre>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="kd">var</span> <span class="nx">init</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">options</span><span class="p">,</span> <span class="nx">callback</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">options</span><span class="p">.</span><span class="nx">clientId</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s1">&#39;client id not specified&#39;</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="nx">Twitch</span><span class="p">.</span><span class="nx">_config</span><span class="p">.</span><span class="nx">clientId</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">clientId</span><span class="p">;</span>
+    <span class="nx">Twitch</span><span class="p">.</span><span class="nx">_initSession</span><span class="p">();</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">callback</span> <span class="o">===</span> <span class="s1">&#39;function&#39;</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">callback</span><span class="p">(</span><span class="kc">null</span><span class="p">);</span>
+    <span class="p">}</span>
+  <span class="p">};</span>
+
+  <span class="nx">Twitch</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
+    <span class="nx">init</span><span class="o">:</span> <span class="nx">init</span>
+  <span class="p">});</span>
+<span class="p">})();</span>
+<span class="cm">/*jshint expr:true*/</span></pre></div>             </td>           </tr>                               <tr id="section-13">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-13">&#182;</a>               </div>               <h2>Authentication</h2>             </td>             <td class="code">               <div class="highlight"><pre><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span></pre></div>             </td>           </tr>                               <tr id="section-14">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-14">&#182;</a>               </div>               <p>Key of the sessionStorage object or cookie.</p>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="kd">var</span> <span class="nx">SESSION_KEY</span> <span class="o">=</span> <span class="s1">&#39;twitch_oauth_session&#39;</span><span class="p">;</span>
+  <span class="kd">var</span> <span class="nx">parseFragment</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">hash</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">match</span><span class="p">,</span>
+      <span class="nx">session</span><span class="p">;</span>
+
+    <span class="nx">hash</span> <span class="o">=</span> <span class="nx">hash</span> <span class="o">||</span> <span class="nb">document</span><span class="p">.</span><span class="nx">location</span><span class="p">.</span><span class="nx">hash</span><span class="p">;</span>
+
+    <span class="kd">var</span> <span class="nx">hashMatch</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">expr</span><span class="p">)</span> <span class="p">{</span>
+      <span class="kd">var</span> <span class="nx">match</span> <span class="o">=</span> <span class="nx">hash</span><span class="p">.</span><span class="nx">match</span><span class="p">(</span><span class="nx">expr</span><span class="p">);</span>
+      <span class="k">return</span> <span class="nx">match</span> <span class="o">?</span> <span class="nx">match</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">:</span> <span class="kc">null</span><span class="p">;</span>
+    <span class="p">};</span>
+
+    <span class="nx">session</span> <span class="o">=</span> <span class="p">{</span>
+      <span class="nx">token</span><span class="o">:</span> <span class="nx">hashMatch</span><span class="p">(</span><span class="sr">/access_token=(\w+)/</span><span class="p">),</span>
+      <span class="nx">scope</span><span class="o">:</span> <span class="nx">hashMatch</span><span class="p">(</span><span class="sr">/scope=([\w+]+)/</span><span class="p">)</span> <span class="o">?</span> <span class="nx">hashMatch</span><span class="p">(</span><span class="sr">/scope=([\w+]+)/</span><span class="p">).</span><span class="nx">split</span><span class="p">(</span><span class="s1">&#39;+&#39;</span><span class="p">)</span> <span class="o">:</span> <span class="kc">null</span><span class="p">,</span>
+      <span class="nx">state</span><span class="o">:</span> <span class="nx">hashMatch</span><span class="p">(</span><span class="sr">/state=(\w+)/</span><span class="p">),</span>
+      <span class="nx">error</span><span class="o">:</span> <span class="nx">hashMatch</span><span class="p">(</span><span class="sr">/error=(\w+)/</span><span class="p">),</span>
+      <span class="nx">errorDescription</span><span class="o">:</span> <span class="nx">hashMatch</span><span class="p">(</span><span class="sr">/error_description=(\w+)/</span><span class="p">)</span>
+    <span class="p">};</span>
+
+    <span class="k">return</span> <span class="nx">session</span><span class="p">;</span>
+  <span class="p">};</span></pre></div>             </td>           </tr>                               <tr id="section-15">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-15">&#182;</a>               </div>               <p>Update session info from API and store.</p>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="kd">var</span> <span class="nx">updateSession</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">callback</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">Twitch</span><span class="p">.</span><span class="nx">api</span><span class="p">({</span><span class="nx">method</span><span class="o">:</span> <span class="s1">&#39;/&#39;</span><span class="p">},</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
+      <span class="kd">var</span> <span class="nx">session</span><span class="p">;</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">Twitch</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;error encountered updating session:&#39;</span><span class="p">,</span> <span class="nx">err</span><span class="p">);</span>
+        <span class="nx">callback</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="kc">null</span><span class="p">);</span>
+        <span class="k">return</span><span class="p">;</span>
+      <span class="p">}</span>
+
+      <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">response</span><span class="p">.</span><span class="nx">token</span><span class="p">.</span><span class="nx">valid</span><span class="p">)</span> <span class="p">{</span></pre></div>             </td>           </tr>                               <tr id="section-16">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-16">&#182;</a>               </div>               <p>Invalid token. Either it has expired or the user has
+revoked permission, so clear out our stored data.</p>             </td>             <td class="code">               <div class="highlight"><pre>        <span class="nx">session</span> <span class="o">=</span> <span class="p">{};</span>
+        <span class="nx">Twitch</span><span class="p">.</span><span class="nx">_config</span><span class="p">.</span><span class="nx">session</span> <span class="o">=</span> <span class="nx">session</span><span class="p">;</span>
+        <span class="nb">window</span><span class="p">.</span><span class="nx">JSON</span> <span class="o">&amp;&amp;</span> <span class="nx">Twitch</span><span class="p">.</span><span class="nx">_storage</span><span class="p">.</span><span class="nx">setItem</span><span class="p">(</span><span class="nx">SESSION_KEY</span><span class="p">,</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">session</span><span class="p">));</span></pre></div>             </td>           </tr>                               <tr id="section-17">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-17">&#182;</a>               </div>               <p>TODO: emit changed event</p>             </td>             <td class="code">               <div class="highlight"><pre>      <span class="p">}</span>
+
+      <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">callback</span> <span class="o">===</span> <span class="s1">&#39;function&#39;</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">callback</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="nx">session</span><span class="p">);</span>
+      <span class="p">}</span>
+    <span class="p">});</span>
+  <span class="p">};</span></pre></div>             </td>           </tr>                               <tr id="section-18">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-18">&#182;</a>               </div>               <p>Get the current authentication status. Will try to use the stored session
+if possible for speed.
+The <code>force</code> property will trigger an API request to update session data.</p>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="kd">var</span> <span class="nx">getStatus</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">options</span><span class="p">,</span> <span class="nx">callback</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">options</span> <span class="o">===</span> <span class="s1">&#39;function&#39;</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">callback</span> <span class="o">=</span> <span class="nx">options</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">callback</span> <span class="o">!==</span> <span class="s1">&#39;function&#39;</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">callback</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{};</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">Twitch</span><span class="p">.</span><span class="nx">_config</span><span class="p">.</span><span class="nx">session</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s1">&#39;You must call init() before getStatus()&#39;</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="kd">var</span> <span class="nx">makeSession</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">session</span><span class="p">)</span> <span class="p">{</span></pre></div>             </td>           </tr>                               <tr id="section-19">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-19">&#182;</a>               </div>               <p>Make a session object for the client.</p>             </td>             <td class="code">               <div class="highlight"><pre>      <span class="k">return</span> <span class="p">{</span>
+        <span class="nx">authenticated</span><span class="o">:</span> <span class="o">!!</span><span class="nx">session</span><span class="p">.</span><span class="nx">token</span><span class="p">,</span>
+        <span class="nx">token</span><span class="o">:</span> <span class="nx">session</span><span class="p">.</span><span class="nx">token</span><span class="p">,</span>
+        <span class="nx">scope</span><span class="o">:</span> <span class="nx">session</span><span class="p">.</span><span class="nx">scope</span><span class="p">,</span>
+        <span class="nx">error</span><span class="o">:</span> <span class="nx">session</span><span class="p">.</span><span class="nx">error</span><span class="p">,</span>
+        <span class="nx">errorDescription</span><span class="o">:</span> <span class="nx">session</span><span class="p">.</span><span class="nx">errorDescription</span>
+      <span class="p">};</span>
+    <span class="p">};</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="nx">options</span> <span class="o">&amp;&amp;</span> <span class="nx">options</span><span class="p">.</span><span class="nx">force</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">updateSession</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">session</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">callback</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">makeSession</span><span class="p">(</span><span class="nx">session</span> <span class="o">||</span> <span class="nx">Twitch</span><span class="p">.</span><span class="nx">_config</span><span class="p">.</span><span class="nx">session</span><span class="p">));</span>
+      <span class="p">});</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+      <span class="nx">callback</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="nx">makeSession</span><span class="p">(</span><span class="nx">Twitch</span><span class="p">.</span><span class="nx">_config</span><span class="p">.</span><span class="nx">session</span><span class="p">));</span>
+    <span class="p">}</span>
+  <span class="p">};</span></pre></div>             </td>           </tr>                               <tr id="section-20">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-20">&#182;</a>               </div>               <p>Login and redirect back to current page with an access token
+The popup parameter can be used to authorize users without
+leaving your page, as described <a href="http://stackoverflow.com/a/3602045/100296">here</a>.
+<strong>TODO</strong>: description about setting URI</p>
+
+<p>Usage:</p>
+
+<pre><code>Twitch.login({
+  redirect_uri: 'http://myappurl.com/myoauthreturn',
+  popup: false,
+  scope: ['user_read', 'channel_read']
+});
+</code></pre>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="kd">var</span> <span class="nx">login</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">options</span><span class="p">.</span><span class="nx">scope</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s1">&#39;Must specify list of requested scopes&#39;</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="kd">var</span> <span class="nx">params</span> <span class="o">=</span> <span class="p">{</span>
+      <span class="nx">response_type</span><span class="o">:</span> <span class="s1">&#39;token&#39;</span><span class="p">,</span>
+      <span class="nx">client_id</span><span class="o">:</span> <span class="nx">Twitch</span><span class="p">.</span><span class="nx">_config</span><span class="p">.</span><span class="nx">clientId</span><span class="p">,</span>
+      <span class="nx">redirect_uri</span><span class="o">:</span> <span class="nx">options</span><span class="p">.</span><span class="nx">redirect_uri</span> <span class="o">||</span> <span class="nb">window</span><span class="p">.</span><span class="nx">location</span><span class="p">.</span><span class="nx">href</span><span class="p">,</span>
+      <span class="nx">scope</span><span class="o">:</span> <span class="nx">options</span><span class="p">.</span><span class="nx">scope</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">)</span>
+    <span class="p">};</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">params</span><span class="p">.</span><span class="nx">client_id</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s1">&#39;You must call init() before login()&#39;</span><span class="p">);</span>
+    <span class="p">}</span>
+    
+    <span class="kd">var</span> <span class="nx">url</span> <span class="o">=</span> <span class="nx">Twitch</span><span class="p">.</span><span class="nx">baseUrl</span> <span class="o">+</span> <span class="s1">&#39;oauth2/authorize?&#39;</span> <span class="o">+</span> <span class="nx">$</span><span class="p">.</span><span class="nx">param</span><span class="p">(</span><span class="nx">params</span><span class="p">);</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="nx">options</span><span class="p">.</span><span class="nx">popup</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">Twitch</span><span class="p">.</span><span class="nx">_config</span><span class="p">.</span><span class="nx">loginPopup</span> <span class="o">=</span> <span class="nb">window</span><span class="p">.</span><span class="nx">open</span><span class="p">(</span><span class="nx">url</span><span class="p">,</span>
+                          <span class="s2">&quot;Login with TwitchTV&quot;</span><span class="p">,</span>
+                          <span class="s2">&quot;height=450,width=680,resizable=yes,status=yes&quot;</span><span class="p">);</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+      <span class="nb">window</span><span class="p">.</span><span class="nx">location</span> <span class="o">=</span> <span class="nx">url</span><span class="p">;</span>
+    <span class="p">}</span>
+  <span class="p">};</span></pre></div>             </td>           </tr>                               <tr id="section-21">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-21">&#182;</a>               </div>               <p>Retrieve sessions from persistent storage and
+persist new ones.</p>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="kd">var</span> <span class="nx">initSession</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">storedSession</span><span class="p">;</span>
+
+    <span class="nx">Twitch</span><span class="p">.</span><span class="nx">_config</span><span class="p">.</span><span class="nx">session</span> <span class="o">=</span> <span class="p">{};</span></pre></div>             </td>           </tr>                               <tr id="section-22">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-22">&#182;</a>               </div>               <p>For browsers that do not have the JSON native object,
+<a href="http://bestiejs.github.com/json3">JSON.js</a> will work
+as a drop-in implementation.</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="k">if</span> <span class="p">(</span><span class="nb">window</span><span class="p">.</span><span class="nx">JSON</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">storedSession</span> <span class="o">=</span> <span class="nx">Twitch</span><span class="p">.</span><span class="nx">_storage</span><span class="p">.</span><span class="nx">getItem</span><span class="p">(</span><span class="nx">SESSION_KEY</span><span class="p">);</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">storedSession</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">try</span> <span class="p">{</span>
+          <span class="nx">Twitch</span><span class="p">.</span><span class="nx">_config</span><span class="p">.</span><span class="nx">session</span> <span class="o">=</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">storedSession</span><span class="p">);</span>
+        <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span></pre></div>             </td>           </tr>                               <tr id="section-23">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-23">&#182;</a>               </div>                            </td>             <td class="code">               <div class="highlight"><pre>        <span class="p">}</span>
+      <span class="p">}</span>
+    <span class="p">}</span></pre></div>             </td>           </tr>                               <tr id="section-24">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-24">&#182;</a>               </div>               <p>If we're on a page with an access token, it's probably a
+return uri for an authorization attempt. Overwrite with
+the new params if page has them.</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="k">if</span> <span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">location</span><span class="p">.</span><span class="nx">hash</span><span class="p">.</span><span class="nx">match</span><span class="p">(</span><span class="sr">/access_token=(\w+)/</span><span class="p">))</span> <span class="p">{</span>
+      <span class="nx">Twitch</span><span class="p">.</span><span class="nx">_config</span><span class="p">.</span><span class="nx">session</span> <span class="o">=</span> <span class="nx">parseFragment</span><span class="p">();</span></pre></div>             </td>           </tr>                               <tr id="section-25">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-25">&#182;</a>               </div>               <p>Persist to session storage on browsers that support it
+and cookies otherwise.</p>             </td>             <td class="code">               <div class="highlight"><pre>      <span class="k">if</span> <span class="p">(</span><span class="nb">window</span><span class="p">.</span><span class="nx">JSON</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">Twitch</span><span class="p">.</span><span class="nx">_storage</span><span class="p">.</span><span class="nx">setItem</span><span class="p">(</span><span class="nx">SESSION_KEY</span><span class="p">,</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">Twitch</span><span class="p">.</span><span class="nx">_config</span><span class="p">.</span><span class="nx">session</span><span class="p">));</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+  <span class="p">};</span>
+
+  <span class="nx">Twitch</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
+    <span class="nx">_initSession</span><span class="o">:</span> <span class="nx">initSession</span><span class="p">,</span>
+    <span class="nx">_parseFragment</span><span class="o">:</span> <span class="nx">parseFragment</span><span class="p">,</span>
+    <span class="nx">getStatus</span><span class="o">:</span> <span class="nx">getStatus</span><span class="p">,</span>
+    <span class="nx">login</span><span class="o">:</span> <span class="nx">login</span>
+  <span class="p">});</span>
+<span class="p">})();</span>
+
+</pre></div>             </td>           </tr>                </tbody>     </table>   </div> </body> </html> 

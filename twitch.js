@@ -1,4 +1,6 @@
-(function($) {
+// ## Core
+;(function($) {
+  // Wait five seconds for the API request before timing out.
   var REQUEST_TIMEOUT = 5000;
 
   var Twitch = {
@@ -9,9 +11,9 @@
     }
   };
 
-  // Make requests to the TwitchTV API. This is a fairly low-level
-  // interface--most clients are better served by using a related
-  // high-level function if one exists
+  // Perform requests to the TwitchTV API. This is a fairly low-level
+  // interface, so most clients are better served by using a related
+  // high-level function if one exists.
   Twitch.api = function(options, callback) {
     var params = options.params || {};
     callback = callback || function() {};
@@ -23,6 +25,9 @@
       params.oauth_token = Twitch._config.session.token;
     }
 
+    // When using JSONP, any error response will have a
+    // `200` HTTP status code with the actual code in the body
+    // so we can parse them.
     $.ajax({
       url: url + '?' + $.param(params),
       dataType: 'jsonp',
@@ -34,8 +39,8 @@
       callback(null, data);
     })
     .fail(function() {
-      // forced fail by request timeout; we have no
-      // way of knowing the actual error with json-p
+      // Forced fail by request timeout; we have no
+      // way of knowing the actual error with JSONP.
       callback(new Error('Request Timeout'), null);
     });
   };
@@ -47,10 +52,14 @@
   };
 
   window.Twitch = Twitch;
+// Support either [jQuery](http://jquery.com) or [Zepto](http://zeptojs.com)
 })(window.jQuery || window.Zepto);
+// ## Storage
+// Persistence layer for the SDK on top of sessionStorage, with
+// a cookie fallback for older browsers.
 (function() {
-  // From remy's DOM storage polyfill
-  // https://gist.github.com/350433
+  // Adapted from remy's [DOM storage polyfill][].
+  // [DOM storage polyfill]: https://gist.github.com/350433
 
   var store = window.sessionStorage;
 
@@ -156,21 +165,26 @@
     _storage: store
   });
 
-})();(function() {
+})();
+// ## Initialization
+(function() {
 
-  // Initialize the library
+  // Initialize the library.
+  //
   // Accepts an options object specifying
-  // your app's client id, recieved after
+  // your appplication's __client id__, recieved after
   // app creation on TwitchTV.
   //
   // Typical initialization:
-  // <script>
-  // Twitch.init({
-  //   clientId: YOUR_CLIENT_ID
-  // }, function() {
-  //   console.log('the library is now loaded')
-  // });
-  // </script>
+  //
+  //     <script>
+  //     Twitch.init({
+  //       clientId: YOUR_CLIENT_ID
+  //     }, function() {
+  //       console.log('the library is now loaded')
+  //     });
+  //     </script>
+  //
   var init = function(options, callback) {
     if (!options.clientId) {
       throw new Error('client id not specified');
@@ -187,8 +201,11 @@
   Twitch.extend({
     init: init
   });
-})();/*jshint expr:true*/
+})();
+/*jshint expr:true*/
+// ## Authentication
 (function() {
+  // Key of the sessionStorage object or cookie.
   var SESSION_KEY = 'twitch_oauth_session';
   var parseFragment = function(hash) {
     var match,
@@ -212,7 +229,7 @@
     return session;
   };
 
-  // Update session info from API and store
+  // Update session info from API and store.
   var updateSession = function(callback) {
     Twitch.api({method: '/'}, function(err, response) {
       var session;
@@ -223,7 +240,8 @@
       }
 
       if (!response.token.valid) {
-        // Invalid token. Clear our stored data
+        // Invalid token. Either it has expired or the user has
+        // revoked permission, so clear out our stored data.
         session = {};
         Twitch._config.session = session;
         window.JSON && Twitch._storage.setItem(SESSION_KEY, JSON.stringify(session));
@@ -238,7 +256,7 @@
 
   // Get the current authentication status. Will try to use the stored session
   // if possible for speed.
-  // The 'force' property will trigger an API request to update session data.
+  // The `force` property will trigger an API request to update session data.
   var getStatus = function(options, callback) {
     if (typeof options === 'function') {
         callback = options;
@@ -251,7 +269,7 @@
     }
 
     var makeSession = function(session) {
-      // Make a new session object for rendering to the user
+      // Make a session object for the client.
       return {
         authenticated: !!session.token,
         token: session.token,
@@ -272,14 +290,16 @@
 
   // Login and redirect back to current page with an access token
   // The popup parameter can be used to authorize users without
-  // leaving your page, as described in http://stackoverflow.com/a/3602045/100296
-  // TODO: description about setting URI
+  // leaving your page, as described [here](http://stackoverflow.com/a/3602045/100296).
+  // **TODO**: description about setting URI
+  //
   // Usage:
-  // Twitch.login({
-  //   redirect_uri: 'http://myappurl',
-  //   popup: false,
-  //   scope: ['user_read', 'channel_read']
-  // });
+  //
+  //     Twitch.login({
+  //       redirect_uri: 'http://myappurl.com/myoauthreturn',
+  //       popup: false,
+  //       scope: ['user_read', 'channel_read']
+  //     });
   var login = function(options) {
     if (!options.scope) {
       throw new Error('Must specify list of requested scopes');
@@ -307,13 +327,14 @@
   };
 
   // Retrieve sessions from persistent storage and
-  // persist new sessions.
+  // persist new ones.
   var initSession = function() {
     var storedSession;
 
     Twitch._config.session = {};
-    // Retrieve sessions from persistent storage and
-    // persist new sessions.
+    // For browsers that do not have the JSON native object,
+    // [JSON.js](http://bestiejs.github.com/json3) will work
+    // as a drop-in implementation.
     if (window.JSON) {
       storedSession = Twitch._storage.getItem(SESSION_KEY);
       if (storedSession) {
@@ -325,12 +346,14 @@
       }
     }
 
-    // overwrite with new params if page has them
+    // If we're on a page with an access token, it's probably a
+    // return uri for an authorization attempt. Overwrite with
+    // the new params if page has them.
     if (document.location.hash.match(/access_token=(\w+)/)) {
       Twitch._config.session = parseFragment();
 
-      // Persist to session storage on browsers that support it,
-      // cookies otherwise
+      // Persist to session storage on browsers that support it
+      // and cookies otherwise.
       if (window.JSON) {
         Twitch._storage.setItem(SESSION_KEY, JSON.stringify(Twitch._config.session));
       }
