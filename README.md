@@ -1,17 +1,21 @@
 # TwitchTV JavaScript SDK
 
-## Overview
+__TODO:__ overview
 
+
+Check out the [Project page](http://hebo.github.com/twitch-sdk).
+
+You might also be interested in the [annotated source code](http://hebo.github.com/twitch-sdk/docs/twitch.html).
 
 ## Loading
 
 To integrate the TwitchTV JavaScript SDK on your site, follow these steps:
 
-First, register a [new client application](). Record the **Client Id** and **Client Secret** you receive in a safe place.
+First, register a [new client application](). Record the **Client ID** and **Client Secret** you receive in a safe place.
 
-To load and initialize the SDK, add the following code to your page, filling in the Client Id of your app:
+To load and initialize the SDK, add the following code to your page, filling in the __Client ID__ of your app:
 
-    <script src="https://raw.github.com/Hebo/twitch-sdk/master/twitch.js?login=Hebo&token=cedd499f33d7080fa720e65f767e635d"></script>
+    <script src="https://raw.github.com/Hebo/twitch-sdk/master/twitch.js"></script>
 
     <script>
       Twitch.init({clientId: 'YOUR_CLIENT_ID_HERE'}, function(error) {
@@ -19,7 +23,7 @@ To load and initialize the SDK, add the following code to your page, filling in 
       });
     </script>
 
-You can now perform actions that do not require authorization, or have your users log in to TwitchTV for additional permissions
+You can now perform actions that do not require authorization, or have your users log in to TwitchTV for additional permissions.
 
 **TODO**: login guide
 
@@ -81,13 +85,13 @@ Get the logged-in user's channel stream key:
       console.log(channel.stream_key);
     });
 
-#### Development
+### Development
 
-Tests:
+#### Tests
 
     make test
 
-Docs:
+#### Docs
 
 Install pygments as described [here](https://github.com/mojombo/jekyll/wiki/install)
 
