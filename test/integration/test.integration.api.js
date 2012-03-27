@@ -48,16 +48,34 @@ describe('API', function() {
     });
 
     describe('responses', function() {
-      it('TODO: handle nonexistent response', function(done) {
+      it('TODO: handle nonexistent method', function(done) {
         done();
         // Twitch.api({method: 'fakeresource'}, function(err, channel) {
         // });
       });
 
-      it('TODO: handle unauthorized response', function(done) {
-        done();
-        // Twitch.api({method: 'unauthorized'}, function(err, channel) {
-        // });
+      it('handle nonexistent user', function(done) {
+        Twitch.api({method: 'users/4y8yyjcju3p'}, function(err, user) {
+          wrap(done, function() {
+            should.not.exist(user);
+            err.should.have.property('error', 'Not Found');
+            err.should.have.property('status', 404);
+            done();
+          });
+        });
+      });
+
+      it('handle unauthorized response', function(done) {
+        Twitch._config = {session: {}};
+
+        Twitch.api({method: 'user'}, function(err, user) {
+          wrap(done, function() {
+            should.not.exist(user);
+            err.should.have.property('error', 'Unauthorized');
+            err.should.have.property('status', 401);
+            done();
+          });
+        });
       });
     });
   });

@@ -7,6 +7,8 @@ Check out the [Project page](http://hebo.github.com/twitch-sdk).
 
 You might also be interested in the [annotated source code](http://hebo.github.com/twitch-sdk/docs/twitch.html).
 
+For a detailed specification of API resources, see the [wiki](https://github.com/Hebo/twitch-sdk/wiki/API)
+
 ## Loading
 
 To integrate the TwitchTV JavaScript SDK on your site, follow these steps:
@@ -37,7 +39,7 @@ The TwitchTV JavaScript SDK enables your users to log on or register using their
 
 ### Twitch.login
 
-Log in a user or request additional permissions. By default, the user will be directed to the TwitchTV sign in/approve page, then back to the same page. This page must be the redirect_uri you specified when creating the client. You may customize the redirect_uri if the user is currently on a different page.
+Log in a user or request additional permissions. By default, the user will be directed to the TwitchTV sign in & approve page, then back to the same page. This page must be the redirect_uri you specified when creating the client. You may customize the redirect_uri if the user is currently on a different page.
 
 TODO: button code/images
 
@@ -95,4 +97,4 @@ Get the logged-in user's channel stream key:
 
 Install pygments as described [here](https://github.com/mojombo/jekyll/wiki/install)
 
-   make docs
+    make docs
