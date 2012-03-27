@@ -34,6 +34,26 @@ Check out the [example implemention][]
 
 [example implemention]: http://hebo.github.com/twitch-sdk/example.html
 
+## Core Methods
+
+### Twitch.init
+
+TODO
+
+### Twitch.api
+
+Make direct requests to the [TwitchTV API][] on behalf of your users. This method handles authorization, so any requests you make to the API will automatically be authenticated on behalf of the logged in user.
+
+[TwitchTV API]: https://github.com/Hebo/twitch-sdk/wiki/API
+
+#### Usage
+
+Get the logged-in user's channel stream key:
+
+    Twitch.api({method: 'channel'}, function(error, channel) {
+      console.log(channel.stream_key);
+    });
+
 ## Authentication
 The TwitchTV JavaScript SDK enables your users to log on or register using their TwitchTV accounts. The SDK handles synchronizing state between your site and TwitchTV, so users will stay logged in to your app as long as they have a valid access token.
 
@@ -75,27 +95,13 @@ Force an update of the status:
       }
     }
 
-### Twitch.api
+## Development
 
-Make direct requests to the [TwitchTV API][] on behalf of your users. This method handles authorization, so any requests you make to the API will automatically be authenticated on behalf of the logged in user.
-
-[TwitchTV API]: https://github.com/Hebo/twitch-sdk/wiki/API
-
-#### Usage
-
-Get the logged-in user's channel stream key:
-
-    Twitch.api({method: 'channel'}, function(error, channel) {
-      console.log(channel.stream_key);
-    });
-
-### Development
-
-#### Tests
+### Tests
 
     make test
 
-#### Docs
+### Docs
 
 Install pygments as described [here](https://github.com/mojombo/jekyll/wiki/install)
 
