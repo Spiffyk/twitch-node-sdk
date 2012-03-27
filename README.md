@@ -39,15 +39,17 @@ The TwitchTV JavaScript SDK enables your users to log on or register using their
 
 ### Twitch.login
 
-Log in a user or request additional permissions. By default, the user will be directed to the TwitchTV sign in & approve page, then back to the same page. This page must be the redirect_uri you specified when creating the client. You may customize the redirect_uri if the user is currently on a different page.
+Log in a user or request additional permissions. By default, the user will be directed to the TwitchTV sign in & approve page, then back to the same page. This page must be the `redirect_uri` you specified when creating the client. You may customize the `redirect_uri` if the user is currently on a different page. Make sure the JavaScript SDK is included on the `redirect_uri` page.
+
+Once the user is returned to the `redirect_uri` after authorization, the SDK will store the session infomation in [DOM Storage][] or cookies, so authentication will persist throughout your website. You may also store this token, associated with a user on your site, to make continued requests on behalf of that user.
+
+[DOM Storage]: https://developer.mozilla.org/en/DOM/Storage#sessionStorage
 
 TODO: button code/images
 
 #### Usage
 
     Twitch.login({
-      redirect_uri: REDIRECT_URI,
-      popup: true,
       scope: ['user_read', 'channel_read']
     });
 
@@ -98,3 +100,8 @@ Get the logged-in user's channel stream key:
 Install pygments as described [here](https://github.com/mojombo/jekyll/wiki/install)
 
     make docs
+
+To update the docs on github pages:
+
+    git checkout gh-pages
+    make
