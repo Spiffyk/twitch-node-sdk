@@ -1,6 +1,10 @@
 /*jshint expr:true*/
 describe('Authentication', function() {
   describe('#_parseFragment()', function() {
+    after(function() {
+      document.location.hash = '';
+    });
+
     it('should extract params from location hash', function() {
       var hash = "access_token=ew35h4pk0xg7iy1" +
              "&scope=user_read+channel_read&state=user_dayjay";
@@ -37,6 +41,13 @@ describe('Authentication', function() {
   });
 
   describe('#getStatus()', function() {
+    before(function() {
+      var hash = "access_token=ew35h4pk0xg7iy1" +
+             "&scope=user_read+channel_read&state=user_dayjay";
+
+      document.location.hash = hash;
+    });
+
     beforeEach(function() {
       sinon.stub(Twitch, 'api');
     });

@@ -5,7 +5,7 @@ SRC = lib/twitch.core.js \
 	lib/twitch.init.js \
 	lib/twitch.auth.js
 
-all: twitch.min.js
+all: twitch.min.js docs
 
 test: twitch.js
 	node test/server.js
