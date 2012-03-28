@@ -1,6 +1,8 @@
 /*jshint expr:true*/
 describe('Core', function() {
-
+  before(function() {
+    document.location.hash = '';
+  });
 
   it('should set base configuration', function() {
     Twitch.should.have.property('baseUrl', 'http://beta.twitch.tv/kraken/');

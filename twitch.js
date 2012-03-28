@@ -4,6 +4,7 @@
   var REQUEST_TIMEOUT = 5000;
 
   var Twitch = {
+    $: $,
     baseUrl: 'http://beta.twitch.tv/kraken/',
     _config: {},
     extend: function(src) {
@@ -217,7 +218,8 @@
 // ## Authentication
 (function() {
   // Key of the sessionStorage object or cookie.
-  var SESSION_KEY = 'twitch_oauth_session';
+  var SESSION_KEY = 'twitch_oauth_session',
+    $ = Twitch.$;
   var parseFragment = function(hash) {
     var match,
       session;
