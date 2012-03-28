@@ -16,6 +16,7 @@
     "chai": "0.5.x",
     "mocha": "1.0.0",
     "sinon": "1.3.x",
-    "docco": "latest"
+    "docco": "latest",
+    "connect": "latest"
   }
 }

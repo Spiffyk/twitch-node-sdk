@@ -8,7 +8,7 @@ SRC = lib/twitch.core.js \
 all: twitch.min.js
 
 test: twitch.js
-	open test/index.html
+	node test/server.js
 
 docs: twitch.js
 	$(NODE_BIN)docco twitch.js
