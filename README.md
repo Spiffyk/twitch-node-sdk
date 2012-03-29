@@ -97,8 +97,6 @@ Once the user is returned to the `redirect_uri` after authorization, the SDK wil
 
 [DOM Storage]: https://developer.mozilla.org/en/DOM/Storage#sessionStorage
 
-TODO: button code/images
-
 #### Usage
 
     Twitch.login({
