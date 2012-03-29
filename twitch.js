@@ -346,9 +346,9 @@
   //
   // Usage:
   //
-  //   Twitch.logout(function(error) {
-  //     // the user is now logged out
-  //   });
+  //     Twitch.logout(function(error) {
+  //       // the user is now logged out
+  //     });
   var logout = function(callback) {
     // Reset the current session
     Twitch._config.session = {};
