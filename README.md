@@ -7,7 +7,7 @@ Check out the [Project page](http://hebo.github.com/twitch-sdk).
 
 You might also be interested in the [annotated source code](http://hebo.github.com/twitch-sdk/docs/twitch.html).
 
-For a detailed specification of API resources, see the [wiki](https://github.com/Hebo/twitch-sdk/wiki/API)
+For a detailed specification of API resources, see the [wiki](https://github.com/Hebo/twitch-sdk/wiki/API).
 
 ## Loading
 
@@ -30,7 +30,7 @@ You can now perform actions that do not require authorization, or have your user
 **TODO**: login guide
 
 ### Example
-Check out the [example implemention][]
+Check out the [example implemention][].
 
 [example implemention]: http://hebo.github.com/twitch-sdk/example.html
 
@@ -38,7 +38,7 @@ Check out the [example implemention][]
 
 ### Twitch.init
 
-Initialize the TwitchTV API with your Client ID. This method must be called prior to other actions. 
+Initialize the TwitchTV API with your Client ID. This method must be called prior to other actions. If the user is already authenticated, you can perform authenticated actions after initialization. Otherwise, you must call Twitch.login to have the user authorize your app. 
 
 #### Usage
 
