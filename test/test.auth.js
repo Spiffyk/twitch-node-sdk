@@ -170,6 +170,33 @@ describe('Authentication', function() {
     });
   });
 
+  describe('#logout()', function() {
+    beforeEach(function() {
+      Twitch.init({clientId: 'myclientid'});
+      Twitch._config.session = {
+        token: 'abcdef'
+      };
+    });
+
+    it('should reset session', function(done) {
+      Twitch.logout(function(err) {
+        should.not.exist(err);
+        Twitch._config.session.should.eql({});
+        done();
+      });
+    });
+
+    it('should reset storage', function(done) {
+      var spy = sinon.spy(Twitch._storage, 'removeItem');
+      Twitch.logout(function(err) {
+        should.not.exist(err);
+        sinon.assert.calledWith(spy, 'twitch_oauth_session');
+        spy.restore();
+        done();
+      });
+    });
+  });
+
   describe('#initSession()', function() {
     it('TODO: should set session', function() {
     });

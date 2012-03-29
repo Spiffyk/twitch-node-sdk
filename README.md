@@ -107,6 +107,16 @@ TODO: button code/images
 
     TODO: args list, scopes, popups for advanced functionality
 
+### Twitch.logout
+
+Reset the session and delete from persistent storage, which is akin to logging out. This does not deactivate the access token given to your app, so you can continue to perform actions if your server stored the token.
+
+#### Usage
+
+    Twitch.logout(function(error) {
+        // the user is now logged out
+    });
+
 ### Twitch.getStatus
 
 Retrieve the current login status of a user. Whenever possible, `getStatus` will try to use the stored session for speed. You can force `getStatus` to check the stored session against the API if needed.

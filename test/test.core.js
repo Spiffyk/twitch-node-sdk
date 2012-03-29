@@ -16,7 +16,7 @@ describe('Core', function() {
 
   describe('#api()', function() {
     beforeEach(function() {
-      Twitch._storage.removeItem('twitch_oauth_session');
+      Twitch.logout();
       Twitch._config = {};
       sinon.stub(jQuery, 'ajax', function(opts) {
         opts = JSON.stringify(opts);

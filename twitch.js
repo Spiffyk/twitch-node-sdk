@@ -339,6 +339,27 @@
     }
   };
 
+  // Reset the session and delete from persistent storage, which is
+  // akin to logging out. This does not deactivate the access token
+  // given to your app, so you can continue to perform actions if
+  // your server stored the token.
+  //
+  // Usage:
+  //
+  //   Twitch.logout(function(error) {
+  //     // the user is now logged out
+  //   });
+  var logout = function(callback) {
+    // Reset the current session
+    Twitch._config.session = {};
+    // Remove from persistent storage.
+    Twitch._storage.removeItem(SESSION_KEY);
+
+    if (typeof callback === 'function') {
+      callback(null);
+    }
+  };
+
   // Retrieve sessions from persistent storage and
   // persist new ones.
   var initSession = function() {
@@ -377,6 +398,7 @@
     _initSession: initSession,
     _parseFragment: parseFragment,
     getStatus: getStatus,
-    login: login
+    login: login,
+    logout: logout
   });
 })();
