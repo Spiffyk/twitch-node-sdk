@@ -29,8 +29,30 @@ You can now perform actions that do not require authorization, or have your user
 
 **TODO**: login guide
 
+To add login functionality, first add the button to your page:
+
+    <img src="http://ttv-api.s3.amazonaws.com/twitch_connect.png" class="twitch-connect" href="#" />
+
+Now add the javascript to trigger the login:
+
+    $('.twitch-connect').click(function() {
+      Twitch.login({
+        scope: ['user_read', 'channel_read']
+      });
+    })
+
+You probably only want to show the button when the user is not logged in, so add this to the callback on Twitch.init:
+
+    Twitch.getStatus(function(error, status) {
+      if (status.authenticated) {
+        // Already logged in, hide button
+        $('.twitch-connect').hide()
+      }
+    });
+
 ### Example
-Check out the [example implemention][].
+
+For a simple example of integrating the TwitchTV SDK with login functionality, please check out the [example implemention][].
 
 [example implemention]: http://hebo.github.com/twitch-sdk/example.html
 
