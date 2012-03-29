@@ -27,13 +27,13 @@ To load and initialize the SDK, add the following code to your page, filling in 
 
 You can now perform actions that do not require authorization, or have your users log in to TwitchTV for additional permissions.
 
-**TODO**: login guide
+### Login
 
 To add login functionality, first add the button to your page:
 
     <img src="http://ttv-api.s3.amazonaws.com/twitch_connect.png" class="twitch-connect" href="#" />
 
-Now add the javascript to trigger the login:
+Now add the JavaScript to trigger the login:
 
     $('.twitch-connect').click(function() {
       Twitch.login({
