@@ -55,7 +55,7 @@
   };
 
   // Log messages to the browser console if available, prefixed
-  // with `[Twitch]`
+  // with `[Twitch]`.
   Twitch.log = function(message) {
     Array.prototype.unshift.call(arguments, '[Twitch]');
     if (window.console) {
@@ -64,7 +64,7 @@
   };
 
   window.Twitch = Twitch;
-// Support either [jQuery](http://jquery.com) or [Zepto](http://zeptojs.com)
+// Support either [jQuery](http://jquery.com) or [Zepto](http://zeptojs.com).
 })(window.jQuery || window.Zepto);
 // ## Storage
 // Persistence layer for the SDK on top of sessionStorage, with
