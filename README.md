@@ -38,7 +38,17 @@ Check out the [example implemention][]
 
 ### Twitch.init
 
-TODO
+Initialize the TwitchTV API with your Client ID. This method must be called prior to other actions. 
+
+#### Usage
+
+    Twitch.init({clientId: 'YOUR_CLIENT_ID_HERE'}, function(error) {
+      if (error) {
+        // error encountered while loading
+        console.log(error);
+      }
+      // the sdk is now loaded
+    });
 
 ### Twitch.api
 
