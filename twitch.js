@@ -38,8 +38,8 @@
       timeout : REQUEST_TIMEOUT
     })
     .done(function(data) {
-      console.log('Response Data:');
-      console.log(data);
+      Twitch.log('Response Data:');
+      Twitch.log(data);
       if (data.error) {
         Twitch.log('API Error:', data.error + ';', data.message);
         callback(data, null);

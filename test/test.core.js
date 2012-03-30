@@ -20,7 +20,7 @@ describe('Core', function() {
       Twitch._config = {};
       sinon.stub(jQuery, 'ajax', function(opts) {
         opts = JSON.stringify(opts);
-        console.log('ajax called with:', opts);
+        Twitch.log('ajax called with:', opts);
         return {
           done: function() {return this;},
           fail: function() {return this;}

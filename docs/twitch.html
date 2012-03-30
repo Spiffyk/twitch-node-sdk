@@ -29,8 +29,8 @@ so we can parse them.</p>             </td>             <td class="code">       
       <span class="nx">timeout</span> <span class="o">:</span> <span class="nx">REQUEST_TIMEOUT</span>
     <span class="p">})</span>
     <span class="p">.</span><span class="nx">done</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
-      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Response Data:&#39;</span><span class="p">);</span>
-      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">data</span><span class="p">);</span>
+      <span class="nx">Twitch</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Response Data:&#39;</span><span class="p">);</span>
+      <span class="nx">Twitch</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">data</span><span class="p">);</span>
       <span class="k">if</span> <span class="p">(</span><span class="nx">data</span><span class="p">.</span><span class="nx">error</span><span class="p">)</span> <span class="p">{</span>
         <span class="nx">Twitch</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;API Error:&#39;</span><span class="p">,</span> <span class="nx">data</span><span class="p">.</span><span class="nx">error</span> <span class="o">+</span> <span class="s1">&#39;;&#39;</span><span class="p">,</span> <span class="nx">data</span><span class="p">.</span><span class="nx">message</span><span class="p">);</span>
         <span class="nx">callback</span><span class="p">(</span><span class="nx">data</span><span class="p">,</span> <span class="kc">null</span><span class="p">);</span>
