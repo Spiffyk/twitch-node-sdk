@@ -13,7 +13,7 @@ For a detailed specification of API resources, see the [wiki](https://github.com
 
 To integrate the TwitchTV JavaScript SDK on your site, follow these steps:
 
-First, register a [new client application](). Record the **Client ID** and **Client Secret** you receive in a safe place.
+First, register a [new client application][]. Record the **Client ID** and **Client Secret** you receive in a safe place.
 
 To load and initialize the SDK, add the following code to your page, filling in the __Client ID__ of your app:
 
@@ -25,7 +25,9 @@ To load and initialize the SDK, add the following code to your page, filling in 
       });
     </script>
 
-You can now perform actions that do not require authorization, or have your users log in to TwitchTV for additional permissions.
+You can now perform actions that do not require authorization or have your users log in to TwitchTV for additional permissions.
+
+[new client application]: http://beta.twitch.tv/kraken/oauth2/clients/new
 
 ### Login
 
@@ -54,7 +56,10 @@ You probably only want to show the button when the user is not logged in, so add
 
 For a simple example of integrating the TwitchTV SDK with login functionality, please check out the [example implemention][].
 
+![Authorize page][]
+
 [example implemention]: http://hebo.github.com/twitch-sdk/example.html
+[Authorize page]: http://ttv-api.s3.amazonaws.com/screenshots/authorize.png
 
 ## Core Methods
 
