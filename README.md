@@ -17,7 +17,7 @@ First, register a [new client application][]. Record the **Client ID** and **Cli
 
 To load and initialize the SDK, add the following code to your page, filling in the __Client ID__ of your app:
 
-    <script src="https://raw.github.com/Hebo/twitch-sdk/master/twitch.js"></script>
+    <script src="http://ttv-api.s3.amazonaws.com/twitch.min-0.0.3.js"></script>
 
     <script>
       Twitch.init({clientId: 'YOUR_CLIENT_ID_HERE'}, function(error) {
