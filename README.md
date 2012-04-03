@@ -17,7 +17,7 @@ First, register a [new client application][]. Record the **Client ID** and **Cli
 
 To load and initialize the SDK, add the following code to your page, filling in the __Client ID__ of your app:
 
-    <script src="http://ttv-api.s3.amazonaws.com/twitch.min-0.0.3.js"></script>
+    <script src="http://ttv-api.s3.amazonaws.com/twitch.min-0.0.4.js"></script>
 
     <script>
       Twitch.init({clientId: 'YOUR_CLIENT_ID_HERE'}, function(error, status) {
@@ -142,6 +142,10 @@ Force an update of the status:
     }
 
 ## Development
+
+### Building
+
+    make
 
 ### Tests
 
