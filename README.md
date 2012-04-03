@@ -20,7 +20,7 @@ To load and initialize the SDK, add the following code to your page, filling in 
     <script src="http://ttv-api.s3.amazonaws.com/twitch.min-0.0.3.js"></script>
 
     <script>
-      Twitch.init({clientId: 'YOUR_CLIENT_ID_HERE'}, function(error) {
+      Twitch.init({clientId: 'YOUR_CLIENT_ID_HERE'}, function(error, status) {
         // the sdk is now loaded
       });
     </script>
@@ -45,12 +45,10 @@ Now add the JavaScript to trigger the login:
 
 You probably only want to show the button when the user is not logged in, so add this to the callback on Twitch.init:
 
-    Twitch.getStatus(function(error, status) {
-      if (status.authenticated) {
-        // Already logged in, hide button
-        $('.twitch-connect').hide()
-      }
-    });
+    if (status.authenticated) {
+      // Already logged in, hide button
+      $('.twitch-connect').hide()
+    }
 
 ### Example
 
@@ -69,12 +67,15 @@ Initialize the TwitchTV API with your Client ID. This method must be called prio
 
 #### Usage
 
-    Twitch.init({clientId: 'YOUR_CLIENT_ID_HERE'}, function(error) {
+    Twitch.init({clientId: 'YOUR_CLIENT_ID_HERE'}, function(error, status) {
       if (error) {
         // error encountered while loading
         console.log(error);
       }
       // the sdk is now loaded
+      if (status.authenticated) {
+        // user is currently logged in
+      }
     });
 
 ### Twitch.api

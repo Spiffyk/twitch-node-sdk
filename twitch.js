@@ -192,7 +192,7 @@
   //     <script>
   //     Twitch.init({
   //       clientId: YOUR_CLIENT_ID
-  //     }, function() {
+  //     }, function(err, status) {
   //       console.log('the library is now loaded')
   //     });
   //     </script>
@@ -206,7 +206,7 @@
     Twitch._initSession();
 
     if (typeof callback === 'function') {
-      callback(null);
+      Twitch.getStatus(callback);
     }
   };
 
@@ -333,7 +333,7 @@
     if (options.popup) {
       Twitch._config.loginPopup = window.open(url,
                           "Login with TwitchTV",
-                          "height=450,width=680,resizable=yes,status=yes");
+                          "height=600,width=660,resizable=yes,status=yes");
     } else {
       window.location = url;
     }

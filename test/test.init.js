@@ -21,8 +21,17 @@ describe('Initialization', function() {
     });
 
     it('should callback without error', function(done) {
-      Twitch.init({clientId: 'myclientid'}, function(err) {
+      Twitch.init({clientId: 'myclientid'}, function(err, status) {
         should.not.exist(null);
+        done();
+      });
+    });
+
+    it('should callback with status', function(done) {
+      Twitch.init({clientId: 'myclientid'}, function(err, status) {
+        should.not.exist(null);
+        should.exist(status);
+        status.should.have.property('authenticated', false);
         done();
       });
     });
