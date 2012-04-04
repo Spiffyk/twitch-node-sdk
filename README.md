@@ -143,13 +143,32 @@ Force an update of the status:
 
 ## Events
 
+Most JavaScript-heavy apps use events to be notified of state changes. Some changes might occur due to user actions outside your app's control, so the only way to be notified is through events.
+
+`Twitch.events.addListener` allows you to subscribe to an event:
+
+    Twitch.events.addListener('auth.login', function() {
+      // user is logged in
+    });
+
+`Twitch.events.removeListener` allows you to remove listeners for an event:
+
+    var handleLogin = function() {
+      alert('you're logged in!);
+    };
+
+    Twitch.events.addListener('auth.login', handleLogin);
+    Twitch.events.removeListener('auth.login', handleLogin);
+
+`Twitch.events.removeAllListeners` allows you to remove all listeners for an event.
+
 ### auth.login
 
-This event is emitted when we initialize a session for a user, either because the current page is a login redirect_uri or we have restored the session from persistent storage. 
+This event is emitted when we initialize a session for a user, either because the current page is a login `redirect_uri` or we have restored the session from persistent storage. 
 
 ### auth.logout
 
-This event is emitted when we no longer have a valid session for a user. This means we either called Twitch.logout() or the user has revoked access on TwitchTV for your application.
+This event is emitted when we no longer have a valid session for a user. This means we either called `Twitch.logout` or the user has revoked access on Twitch for your application.
 
 ## Development
 
