@@ -333,6 +333,226 @@ and cookies otherwise.</p>             </td>             <td class="code">      
     <span class="nx">login</span><span class="o">:</span> <span class="nx">login</span><span class="p">,</span>
     <span class="nx">logout</span><span class="o">:</span> <span class="nx">logout</span>
   <span class="p">});</span>
-<span class="p">})();</span>
+<span class="p">})();</span><span class="c1">// ## Events</span>
+<span class="cm">/**</span>
+<span class="cm"> * EventEmitter v3.1.4</span>
+<span class="cm"> * https://github.com/Wolfy87/EventEmitter</span>
+<span class="cm"> *</span>
+<span class="cm"> * Licensed under the MIT license: http://www.opensource.org/licenses/mit-license.php</span>
+<span class="cm"> * Oliver Caldwell (olivercaldwell.co.uk)</span>
+<span class="cm"> */</span>
+
+<span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+  <span class="cm">/**</span>
+<span class="cm">   * EventEmitter class</span>
+<span class="cm">   * Creates an object with event registering and firing methods</span>
+<span class="cm">   */</span>
+  <span class="kd">function</span> <span class="nx">EventEmitter</span><span class="p">()</span> <span class="p">{</span></pre></div>             </td>           </tr>                               <tr id="section-30">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-30">&#182;</a>               </div>               <p>Initialise required storage variables</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="k">this</span><span class="p">.</span><span class="nx">_events</span> <span class="o">=</span> <span class="p">{};</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">_maxListeners</span> <span class="o">=</span> <span class="mi">10</span><span class="p">;</span>
+  <span class="p">}</span>
+  
+  <span class="cm">/**</span>
+<span class="cm">   * Event class</span>
+<span class="cm">   * Contains Event methods and property storage</span>
+<span class="cm">   *</span>
+<span class="cm">   * @param {String} type Event type name</span>
+<span class="cm">   * @param {Function} listener Function to be called when the event is fired</span>
+<span class="cm">   * @param {Object} scope Object that this should be set to when the listener is called</span>
+<span class="cm">   * @param {Boolean} once If true then the listener will be removed after the first call</span>
+<span class="cm">   * @param {Object} instance The parent EventEmitter instance</span>
+<span class="cm">   */</span>
+  <span class="kd">function</span> <span class="nx">Event</span><span class="p">(</span><span class="nx">type</span><span class="p">,</span> <span class="nx">listener</span><span class="p">,</span> <span class="nx">scope</span><span class="p">,</span> <span class="nx">once</span><span class="p">,</span> <span class="nx">instance</span><span class="p">)</span> <span class="p">{</span></pre></div>             </td>           </tr>                               <tr id="section-31">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-31">&#182;</a>               </div>               <p>Store arguments</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="k">this</span><span class="p">.</span><span class="nx">type</span> <span class="o">=</span> <span class="nx">type</span><span class="p">;</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">listener</span> <span class="o">=</span> <span class="nx">listener</span><span class="p">;</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">scope</span> <span class="o">=</span> <span class="nx">scope</span><span class="p">;</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">once</span> <span class="o">=</span> <span class="nx">once</span><span class="p">;</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">instance</span> <span class="o">=</span> <span class="nx">instance</span><span class="p">;</span>
+  <span class="p">}</span>
+  
+  <span class="cm">/**</span>
+<span class="cm">   * Executes the listener</span>
+<span class="cm">   *</span>
+<span class="cm">   * @param {Array} args List of arguments to pass to the listener</span>
+<span class="cm">   * @return {Boolean} If false then it was a once event</span>
+<span class="cm">   */</span>
+  <span class="nx">Event</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">fire</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">args</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">listener</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">scope</span> <span class="o">||</span> <span class="k">this</span><span class="p">.</span><span class="nx">instance</span><span class="p">,</span> <span class="nx">args</span><span class="p">);</span>
+    </pre></div>             </td>           </tr>                               <tr id="section-32">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-32">&#182;</a>               </div>               <p>Remove the listener if this is a once only listener</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="k">if</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">once</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">instance</span><span class="p">.</span><span class="nx">removeListener</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">type</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">listener</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">scope</span><span class="p">);</span>
+      <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
+    <span class="p">}</span>
+  <span class="p">};</span>
+  
+  <span class="cm">/**</span>
+<span class="cm">   * Passes every listener for a specified event to a function one at a time</span>
+<span class="cm">   *</span>
+<span class="cm">   * @param {String} type Event type name</span>
+<span class="cm">   * @param {Function} callback Function to pass each listener to</span>
+<span class="cm">   * @return {Object} The current EventEmitter instance to allow chaining</span>
+<span class="cm">   */</span>
+  <span class="nx">EventEmitter</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">eachListener</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">type</span><span class="p">,</span> <span class="nx">callback</span><span class="p">)</span> <span class="p">{</span></pre></div>             </td>           </tr>                               <tr id="section-33">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-33">&#182;</a>               </div>               <p>Initialise variables</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="kc">null</span><span class="p">,</span>
+      <span class="nx">possibleListeners</span> <span class="o">=</span> <span class="kc">null</span><span class="p">,</span>
+      <span class="nx">result</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+    </pre></div>             </td>           </tr>                               <tr id="section-34">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-34">&#182;</a>               </div>               <p>Only loop if the type exists</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="k">if</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_events</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span><span class="nx">type</span><span class="p">))</span> <span class="p">{</span>
+      <span class="nx">possibleListeners</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">_events</span><span class="p">[</span><span class="nx">type</span><span class="p">];</span>
+      
+      <span class="k">for</span><span class="p">(</span><span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">possibleListeners</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span> <span class="o">+=</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">result</span> <span class="o">=</span> <span class="nx">callback</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="nx">possibleListeners</span><span class="p">[</span><span class="nx">i</span><span class="p">],</span> <span class="nx">i</span><span class="p">);</span>
+        
+        <span class="k">if</span><span class="p">(</span><span class="nx">result</span> <span class="o">===</span> <span class="kc">false</span><span class="p">)</span> <span class="p">{</span>
+          <span class="nx">i</span> <span class="o">-=</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="nx">result</span> <span class="o">===</span> <span class="kc">true</span><span class="p">)</span> <span class="p">{</span>
+          <span class="k">break</span><span class="p">;</span>
+        <span class="p">}</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+    </pre></div>             </td>           </tr>                               <tr id="section-35">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-35">&#182;</a>               </div>               <p>Return the instance to allow chaining</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="k">return</span> <span class="k">this</span><span class="p">;</span>
+  <span class="p">};</span>
+  
+  <span class="cm">/**</span>
+<span class="cm">   * Adds an event listener for the specified event</span>
+<span class="cm">   *</span>
+<span class="cm">   * @param {String} type Event type name</span>
+<span class="cm">   * @param {Function} listener Function to be called when the event is fired</span>
+<span class="cm">   * @param {Object} scope Object that this should be set to when the listener is called</span>
+<span class="cm">   * @param {Boolean} once If true then the listener will be removed after the first call</span>
+<span class="cm">   * @return {Object} The current EventEmitter instance to allow chaining</span>
+<span class="cm">   */</span>
+  <span class="nx">EventEmitter</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">addListener</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">type</span><span class="p">,</span> <span class="nx">listener</span><span class="p">,</span> <span class="nx">scope</span><span class="p">,</span> <span class="nx">once</span><span class="p">)</span> <span class="p">{</span></pre></div>             </td>           </tr>                               <tr id="section-36">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-36">&#182;</a>               </div>               <p>Create the listener array if it does not exist yet</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">_events</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span><span class="nx">type</span><span class="p">))</span> <span class="p">{</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">_events</span><span class="p">[</span><span class="nx">type</span><span class="p">]</span> <span class="o">=</span> <span class="p">[];</span>
+    <span class="p">}</span>
+    </pre></div>             </td>           </tr>                               <tr id="section-37">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-37">&#182;</a>               </div>               <p>Push the new event to the array</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="k">this</span><span class="p">.</span><span class="nx">_events</span><span class="p">[</span><span class="nx">type</span><span class="p">].</span><span class="nx">push</span><span class="p">(</span><span class="k">new</span> <span class="nx">Event</span><span class="p">(</span><span class="nx">type</span><span class="p">,</span> <span class="nx">listener</span><span class="p">,</span> <span class="nx">scope</span><span class="p">,</span> <span class="nx">once</span><span class="p">,</span> <span class="k">this</span><span class="p">));</span>
+    </pre></div>             </td>           </tr>                               <tr id="section-38">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-38">&#182;</a>               </div>               <p>Emit the new listener event</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="k">this</span><span class="p">.</span><span class="nx">emit</span><span class="p">(</span><span class="s1">&#39;newListener&#39;</span><span class="p">,</span> <span class="nx">type</span><span class="p">,</span> <span class="nx">listener</span><span class="p">,</span> <span class="nx">scope</span><span class="p">,</span> <span class="nx">once</span><span class="p">);</span>
+    </pre></div>             </td>           </tr>                               <tr id="section-39">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-39">&#182;</a>               </div>               <p>Check if we have exceeded the maxListener count
+Ignore this check if the count is 0
+Also don't check if we have already fired a warning</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="k">if</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_maxListeners</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">_events</span><span class="p">[</span><span class="nx">type</span><span class="p">].</span><span class="nx">warned</span> <span class="o">&amp;&amp;</span> <span class="k">this</span><span class="p">.</span><span class="nx">_events</span><span class="p">[</span><span class="nx">type</span><span class="p">].</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="k">this</span><span class="p">.</span><span class="nx">_maxListeners</span><span class="p">)</span> <span class="p">{</span></pre></div>             </td>           </tr>                               <tr id="section-40">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-40">&#182;</a>               </div>               <p>The max listener count has been exceeded!</p>             </td>             <td class="code">               <div class="highlight"><pre>      <span class="nx">Twitch</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Possible EventEmitter memory leak detected. &#39;</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">_events</span><span class="p">[</span><span class="nx">type</span><span class="p">].</span><span class="nx">length</span> <span class="o">+</span> <span class="s1">&#39; listeners added. Use emitter.setMaxListeners() to increase limit.&#39;</span><span class="p">);</span>
+      </pre></div>             </td>           </tr>                               <tr id="section-41">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-41">&#182;</a>               </div>               <p>Set the flag so it doesn't fire again</p>             </td>             <td class="code">               <div class="highlight"><pre>      <span class="k">this</span><span class="p">.</span><span class="nx">_events</span><span class="p">[</span><span class="nx">type</span><span class="p">].</span><span class="nx">warned</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+    <span class="p">}</span>
+    </pre></div>             </td>           </tr>                               <tr id="section-42">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-42">&#182;</a>               </div>               <p>Return the instance to allow chaining</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="k">return</span> <span class="k">this</span><span class="p">;</span>
+  <span class="p">};</span>
+  
+  <span class="cm">/**</span>
+<span class="cm">   * Alias of the addListener method</span>
+<span class="cm">   *</span>
+<span class="cm">   * @param {String} type Event type name</span>
+<span class="cm">   * @param {Function} listener Function to be called when the event is fired</span>
+<span class="cm">   * @param {Object} scope Object that this should be set to when the listener is called</span>
+<span class="cm">   * @param {Boolean} once If true then the listener will be removed after the first call</span>
+<span class="cm">   */</span>
+  <span class="nx">EventEmitter</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">on</span> <span class="o">=</span> <span class="nx">EventEmitter</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">addListener</span><span class="p">;</span>
+  
+  <span class="cm">/**</span>
+<span class="cm">   * Alias of the addListener method but will remove the event after the first use</span>
+<span class="cm">   *</span>
+<span class="cm">   * @param {String} type Event type name</span>
+<span class="cm">   * @param {Function} listener Function to be called when the event is fired</span>
+<span class="cm">   * @param {Object} scope Object that this should be set to when the listener is called</span>
+<span class="cm">   * @return {Object} The current EventEmitter instance to allow chaining</span>
+<span class="cm">   */</span>
+  <span class="nx">EventEmitter</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">once</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">type</span><span class="p">,</span> <span class="nx">listener</span><span class="p">,</span> <span class="nx">scope</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">addListener</span><span class="p">(</span><span class="nx">type</span><span class="p">,</span> <span class="nx">listener</span><span class="p">,</span> <span class="nx">scope</span><span class="p">,</span> <span class="kc">true</span><span class="p">);</span>
+  <span class="p">};</span>
+  
+  <span class="cm">/**</span>
+<span class="cm">   * Removes the a listener for the specified event</span>
+<span class="cm">   *</span>
+<span class="cm">   * @param {String} type Event type name the listener must have for the event to be removed</span>
+<span class="cm">   * @param {Function} listener Listener the event must have to be removed</span>
+<span class="cm">   * @param {Object} scope The scope the event must have to be removed</span>
+<span class="cm">   * @return {Object} The current EventEmitter instance to allow chaining</span>
+<span class="cm">   */</span>
+  <span class="nx">EventEmitter</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">removeListener</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">type</span><span class="p">,</span> <span class="nx">listener</span><span class="p">,</span> <span class="nx">scope</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">eachListener</span><span class="p">(</span><span class="nx">type</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">currentListener</span><span class="p">,</span> <span class="nx">index</span><span class="p">)</span> <span class="p">{</span></pre></div>             </td>           </tr>                               <tr id="section-43">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-43">&#182;</a>               </div>               <p>If this is the listener remove it from the array
+We also compare the scope if it was passed</p>             </td>             <td class="code">               <div class="highlight"><pre>      <span class="k">if</span><span class="p">(</span><span class="nx">currentListener</span><span class="p">.</span><span class="nx">listener</span> <span class="o">===</span> <span class="nx">listener</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="o">!</span><span class="nx">scope</span> <span class="o">||</span> <span class="nx">currentListener</span><span class="p">.</span><span class="nx">scope</span> <span class="o">===</span> <span class="nx">scope</span><span class="p">))</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">_events</span><span class="p">[</span><span class="nx">type</span><span class="p">].</span><span class="nx">splice</span><span class="p">(</span><span class="nx">index</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+      <span class="p">}</span>
+    <span class="p">});</span>
+    </pre></div>             </td>           </tr>                               <tr id="section-44">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-44">&#182;</a>               </div>               <p>Remove the property if there are no more listeners</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="k">if</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_events</span><span class="p">[</span><span class="nx">type</span><span class="p">]</span> <span class="o">&amp;&amp;</span> <span class="k">this</span><span class="p">.</span><span class="nx">_events</span><span class="p">[</span><span class="nx">type</span><span class="p">].</span><span class="nx">length</span> <span class="o">===</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">delete</span> <span class="k">this</span><span class="p">.</span><span class="nx">_events</span><span class="p">[</span><span class="nx">type</span><span class="p">];</span>
+    <span class="p">}</span>
+    </pre></div>             </td>           </tr>                               <tr id="section-45">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-45">&#182;</a>               </div>               <p>Return the instance to allow chaining</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="k">return</span> <span class="k">this</span><span class="p">;</span>
+  <span class="p">};</span>
+  
+  <span class="cm">/**</span>
+<span class="cm">   * Alias of the removeListener method</span>
+<span class="cm">   *</span>
+<span class="cm">   * @param {String} type Event type name the listener must have for the event to be removed</span>
+<span class="cm">   * @param {Function} listener Listener the event must have to be removed</span>
+<span class="cm">   * @param {Object} scope The scope the event must have to be removed</span>
+<span class="cm">   * @return {Object} The current EventEmitter instance to allow chaining</span>
+<span class="cm">   */</span>
+  <span class="nx">EventEmitter</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">off</span> <span class="o">=</span> <span class="nx">EventEmitter</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">removeListener</span><span class="p">;</span>
+  
+  <span class="cm">/**</span>
+<span class="cm">   * Removes all listeners for a specified event</span>
+<span class="cm">   * If no event type is passed it will remove every listener</span>
+<span class="cm">   *</span>
+<span class="cm">   * @param {String} type Event type name to remove all listeners from</span>
+<span class="cm">   * @return {Object} The current EventEmitter instance to allow chaining</span>
+<span class="cm">   */</span>
+  <span class="nx">EventEmitter</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">removeAllListeners</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">type</span><span class="p">)</span> <span class="p">{</span></pre></div>             </td>           </tr>                               <tr id="section-46">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-46">&#182;</a>               </div>               <p>Check for a type, if there is none remove all listeners
+If there is a type however, just remove the listeners for that type</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="k">if</span><span class="p">(</span><span class="nx">type</span> <span class="o">&amp;&amp;</span> <span class="k">this</span><span class="p">.</span><span class="nx">_events</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span><span class="nx">type</span><span class="p">))</span> <span class="p">{</span>
+      <span class="k">delete</span> <span class="k">this</span><span class="p">.</span><span class="nx">_events</span><span class="p">[</span><span class="nx">type</span><span class="p">];</span>
+    <span class="p">}</span>
+    <span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nx">type</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">_events</span> <span class="o">=</span> <span class="p">{};</span>
+    <span class="p">}</span>
+    </pre></div>             </td>           </tr>                               <tr id="section-47">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-47">&#182;</a>               </div>               <p>Return the instance to allow chaining</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="k">return</span> <span class="k">this</span><span class="p">;</span>
+  <span class="p">};</span>
+  
+  <span class="cm">/**</span>
+<span class="cm">   * Retrieves the array of listeners for a specified event</span>
+<span class="cm">   *</span>
+<span class="cm">   * @param {String} type Event type name to return all listeners from</span>
+<span class="cm">   * @return {Array} Will return either an array of listeners or an empty array if there are none</span>
+<span class="cm">   */</span>
+  <span class="nx">EventEmitter</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">listeners</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">type</span><span class="p">)</span> <span class="p">{</span></pre></div>             </td>           </tr>                               <tr id="section-48">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-48">&#182;</a>               </div>               <p>Return the array of listeners or an empty array if it does not exist</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="k">if</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_events</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span><span class="nx">type</span><span class="p">))</span> <span class="p">{</span></pre></div>             </td>           </tr>                               <tr id="section-49">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-49">&#182;</a>               </div>               <p>It does exist, loop over building the array</p>             </td>             <td class="code">               <div class="highlight"><pre>      <span class="kd">var</span> <span class="nx">listeners</span> <span class="o">=</span> <span class="p">[];</span>
+      
+      <span class="k">this</span><span class="p">.</span><span class="nx">eachListener</span><span class="p">(</span><span class="nx">type</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">evt</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">listeners</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">evt</span><span class="p">.</span><span class="nx">listener</span><span class="p">);</span>
+      <span class="p">});</span>
+      
+      <span class="k">return</span> <span class="nx">listeners</span><span class="p">;</span>
+    <span class="p">}</span>
+    
+    <span class="k">return</span> <span class="p">[];</span>
+  <span class="p">};</span>
+  
+  <span class="cm">/**</span>
+<span class="cm">   * Emits an event executing all appropriate listeners</span>
+<span class="cm">   * All values passed after the type will be passed as arguments to the listeners</span>
+<span class="cm">   *</span>
+<span class="cm">   * @param {String} type Event type name to run all listeners from</span>
+<span class="cm">   * @return {Object} The current EventEmitter instance to allow chaining</span>
+<span class="cm">   */</span>
+  <span class="nx">EventEmitter</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">emit</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">type</span><span class="p">)</span> <span class="p">{</span></pre></div>             </td>           </tr>                               <tr id="section-50">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-50">&#182;</a>               </div>               <p>Calculate the arguments</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="kd">var</span> <span class="nx">args</span> <span class="o">=</span> <span class="p">[],</span>
+      <span class="nx">i</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+    
+    <span class="k">for</span><span class="p">(</span><span class="nx">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">arguments</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span> <span class="o">+=</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">args</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">arguments</span><span class="p">[</span><span class="nx">i</span><span class="p">]);</span>
+    <span class="p">}</span>
+    
+    <span class="k">this</span><span class="p">.</span><span class="nx">eachListener</span><span class="p">(</span><span class="nx">type</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">currentListener</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="nx">currentListener</span><span class="p">.</span><span class="nx">fire</span><span class="p">(</span><span class="nx">args</span><span class="p">);</span>
+    <span class="p">});</span>
+    </pre></div>             </td>           </tr>                               <tr id="section-51">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-51">&#182;</a>               </div>               <p>Return the instance to allow chaining</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="k">return</span> <span class="k">this</span><span class="p">;</span>
+  <span class="p">};</span>
+  
+  <span class="cm">/**</span>
+<span class="cm">   * Sets the max listener count for the EventEmitter</span>
+<span class="cm">   * When the count of listeners for an event exceeds this limit a warning will be printed</span>
+<span class="cm">   * Set to 0 for no limit</span>
+<span class="cm">   *</span>
+<span class="cm">   * @param {Number} maxListeners The new max listener limit</span>
+<span class="cm">   * @return {Object} The current EventEmitter instance to allow chaining</span>
+<span class="cm">   */</span>
+  <span class="nx">EventEmitter</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">setMaxListeners</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">maxListeners</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">_maxListeners</span> <span class="o">=</span> <span class="nx">maxListeners</span><span class="p">;</span>
+    </pre></div>             </td>           </tr>                               <tr id="section-52">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-52">&#182;</a>               </div>               <p>Return the instance to allow chaining</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="k">return</span> <span class="k">this</span><span class="p">;</span>
+  <span class="p">};</span>
+  </pre></div>             </td>           </tr>                               <tr id="section-53">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-53">&#182;</a>               </div>               <p>Export the class</p>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="nx">Twitch</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
+    <span class="nx">events</span><span class="o">:</span> <span class="k">new</span> <span class="nx">EventEmitter</span><span class="p">()</span>
+  <span class="p">});</span>
+<span class="p">}());</span>
 
 </pre></div>             </td>           </tr>                </tbody>     </table>   </div> </body> </html> 

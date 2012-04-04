@@ -3,7 +3,8 @@ TESTS = test/*.js
 SRC = lib/twitch.core.js \
 	lib/twitch.storage.js \
 	lib/twitch.init.js \
-	lib/twitch.auth.js
+	lib/twitch.auth.js \
+	lib/twitch.events.js
 
 all: twitch.min.js docs
 
