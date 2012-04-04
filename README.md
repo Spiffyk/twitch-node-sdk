@@ -143,6 +143,10 @@ Force an update of the status:
 
 ## Events
 
+### auth.login
+
+This event is emitted when we initialize a session for a user, either because the current page is a login redirect_uri or we have restored the session from persistent storage. 
+
 ### auth.logout
 
 This event is emitted when we no longer have a valid session for a user. This means we either called Twitch.logout() or the user has revoked access on TwitchTV for your application.

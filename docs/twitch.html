@@ -323,6 +323,12 @@ and cookies otherwise.</p>             </td>             <td class="code">      
         <span class="nx">Twitch</span><span class="p">.</span><span class="nx">_storage</span><span class="p">.</span><span class="nx">setItem</span><span class="p">(</span><span class="nx">SESSION_KEY</span><span class="p">,</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">Twitch</span><span class="p">.</span><span class="nx">_config</span><span class="p">.</span><span class="nx">session</span><span class="p">));</span>
       <span class="p">}</span>
     <span class="p">}</span>
+
+    <span class="nx">getStatus</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">status</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">status</span><span class="p">.</span><span class="nx">authenticated</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">Twitch</span><span class="p">.</span><span class="nx">events</span><span class="p">.</span><span class="nx">emit</span><span class="p">(</span><span class="s1">&#39;auth.login&#39;</span><span class="p">);</span>
+      <span class="p">}</span>
+    <span class="p">});</span>
   <span class="p">};</span>
 
   <span class="nx">Twitch</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>

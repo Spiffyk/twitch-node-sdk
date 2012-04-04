@@ -208,7 +208,21 @@ describe('Authentication', function() {
   });
 
   describe('#initSession()', function() {
+    before(function() {
+      var hash = "access_token=ew35h4pk0xg7iy1" +
+             "&scope=user_read+channel_read&state=user_dayjay";
+
+      document.location.hash = hash;
+    });
+
     it('TODO: should set session', function() {
+    });
+
+    it('should emit login event', function() {
+      var spy = sinon.spy();
+      Twitch.events.on('auth.login', spy);
+      Twitch._initSession();
+      sinon.assert.calledOnce(spy);
     });
 
     it('TODO: should handle invalid json', function() {
