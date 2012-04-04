@@ -141,6 +141,12 @@ Force an update of the status:
       }
     }
 
+## Events
+
+### auth.logout
+
+This event is emitted when we no longer have a valid session for a user. This means we either called Twitch.logout() or the user has revoked access on TwitchTV for your application.
+
 ## Development
 
 ### Building

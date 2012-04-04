@@ -195,6 +195,16 @@ describe('Authentication', function() {
         done();
       });
     });
+
+    it('should emit event', function(done) {
+      var spy = sinon.spy();
+      Twitch.events.on('auth.logout', spy);
+      Twitch.logout(function(err) {
+        should.not.exist(err);
+        sinon.assert.calledOnce(spy);
+        done();
+      });
+    });
   });
 
   describe('#initSession()', function() {

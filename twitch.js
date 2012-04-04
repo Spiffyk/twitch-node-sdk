@@ -248,22 +248,18 @@
       var session;
       if (err) {
         Twitch.log('error encountered updating session:', err);
-        callback(err, null);
+        callback && callback(err, null);
         return;
       }
 
       if (!response.token.valid) {
         // Invalid token. Either it has expired or the user has
         // revoked permission, so clear out our stored data.
-        session = {};
-        Twitch._config.session = session;
-        window.JSON && Twitch._storage.setItem(SESSION_KEY, JSON.stringify(session));
-        // TODO: emit changed event
+        Twitch.logout(callback);
+        return;
       }
 
-      if (typeof callback === 'function') {
-        callback(null, session);
-      }
+      callback && callback(null, session);
     });
   };
 
@@ -355,6 +351,7 @@
     // Remove from persistent storage.
     Twitch._storage.removeItem(SESSION_KEY);
 
+    Twitch.events.emit('auth.logout');
     if (typeof callback === 'function') {
       callback(null);
     }
