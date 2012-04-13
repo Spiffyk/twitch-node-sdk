@@ -1,5 +1,9 @@
 /*jshint expr:true*/
 describe('Initialization', function() {
+  before(function() {
+    document.location.hash = '';
+  });
+
   after(function() {
     Twitch._config = {};
   });

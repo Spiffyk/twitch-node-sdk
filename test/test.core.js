@@ -75,5 +75,40 @@ describe('Core', function() {
       }).should.be['true'];
     });
 
+    it('logs out on unauthorized request', function(done) {
+      jQuery.ajax.restore();
+      sinon.stub(jQuery, 'ajax', function(opts) {
+        opts = JSON.stringify(opts);
+        Twitch.log('ajax called with:', opts);
+        return {
+          done: function(cb) {
+            setTimeout(function() {
+              cb({
+                "status":401,
+                "message":"Invalid Token",
+                "error":"Unauthorized"
+              });
+            }, 0);
+            return this;
+          },
+          fail: function() {return this;}
+        };
+      });
+
+      var hash = "access_token=ew35h4pk0xg7iy1" +
+             "&scope=user_read+channel_read&state=user_dayjay";
+      document.location.hash = hash;
+      Twitch.init({clientId: 'myclientid'});
+
+      Twitch.events.on('auth.logout', function() {
+        // should be triggered by api response
+        done();
+      });
+
+      Twitch.api({method: 'user'}, function(err, data) {
+        console.log(err, data);
+      });
+    });
+
   });
 });
