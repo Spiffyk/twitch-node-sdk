@@ -187,11 +187,10 @@ describe('Authentication', function() {
     });
 
     it('should reset storage', function(done) {
-      var spy = sinon.spy(Twitch._storage, 'removeItem');
+      Twitch._storage = { removeItem: sinon.stub() };
       Twitch.logout(function(err) {
         should.not.exist(err);
-        sinon.assert.calledWith(spy, 'twitch_oauth_session');
-        spy.restore();
+        sinon.assert.calledWith(Twitch._storage.removeItem, 'twitch_oauth_session');
         done();
       });
     });
