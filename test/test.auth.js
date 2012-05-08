@@ -142,7 +142,7 @@ describe('Authentication', function() {
 
     it('should create valid urls', function() {
       var lastShouldMatch = function(params) {
-        var baseUrl = 'http://beta.twitch.tv/kraken/oauth2/authorize?',
+        var baseUrl = 'https://betaapi.twitch.tv/kraken/oauth2/authorize?',
           lastCall = window.open.lastCall;
         lastCall.args[0].should.eql(baseUrl + params);
       };

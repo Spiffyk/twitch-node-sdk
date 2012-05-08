@@ -8,7 +8,7 @@
 
   var Twitch = {
     $: $,
-    baseUrl: 'http://beta.twitch.tv/kraken/',
+    baseUrl: 'https://betaapi.twitch.tv/kraken/',
     _config: {},
     extend: function(src) {
       $.extend(Twitch, src);
