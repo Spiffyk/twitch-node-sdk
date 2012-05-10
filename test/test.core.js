@@ -5,7 +5,7 @@ describe('Core', function() {
   });
 
   it('should set base configuration', function() {
-    Twitch.should.have.property('baseUrl', 'https://betaapi.twitch.tv/kraken/');
+    Twitch.should.have.property('baseUrl', 'https://api.twitch.tv/kraken/');
     // Trailing slash
     Twitch.baseUrl.should.match(/\/$/);
     Twitch.should.have.property('_config');
@@ -46,7 +46,7 @@ describe('Core', function() {
       sinon.assert.calledWith($.ajax, {
         dataType: 'jsonp',
         timeout: 5000,
-        url: 'https://betaapi.twitch.tv/kraken/?'
+        url: Twitch.baseUrl + '?'
       });
     });
 
@@ -60,7 +60,7 @@ describe('Core', function() {
       sinon.assert.calledWith($.ajax, {
         dataType: 'jsonp',
         timeout: 5000,
-        url: 'https://betaapi.twitch.tv/kraken/?oauth_token=abc'
+        url: Twitch.baseUrl + '?oauth_token=abc'
       });
     });
 
@@ -71,7 +71,7 @@ describe('Core', function() {
       $.ajax.lastCall.calledWith({
         dataType: 'jsonp',
         timeout: 5000,
-        url: 'https://betaapi.twitch.tv/kraken/user?'
+        url: Twitch.baseUrl + 'user?'
       }).should.be['true'];
     });
 
