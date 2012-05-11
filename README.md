@@ -56,7 +56,7 @@ For a simple example of integrating the TwitchTV SDK with login functionality, p
 
 ![Authorize page][]
 
-[example implemention]: https://github.com/justintv/twitch-js-sdk/example.html
+[example implemention]: http://justintv.github.com/twitch-js-sdk/example.html
 [Authorize page]: http://ttv-api.s3.amazonaws.com/screenshots/authorize.png
 
 ## Core Methods
