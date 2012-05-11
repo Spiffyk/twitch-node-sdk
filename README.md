@@ -27,7 +27,7 @@ To load and initialize the SDK, add the following code to your page, filling in 
 
 You can now perform actions that do not require authorization or have your users log in to TwitchTV for additional permissions.
 
-[new client application]: http://beta.twitch.tv/kraken/oauth2/clients/new
+[new client application]: http://www.twitch.tv/kraken/oauth2/clients/new
 
 ### Login
 
