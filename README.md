@@ -3,11 +3,11 @@
 __TODO:__ overview
 
 
-Check out the [Project page](http://hebo.github.com/twitch-sdk).
+Check out the [Project page](http://justintv.github.com/twitch-js-sdk).
 
-You might also be interested in the [annotated source code](http://hebo.github.com/twitch-sdk/docs/twitch.html).
+You might also be interested in the [annotated source code](http://justintv.github.com/twitch-js-sdk/docs/twitch.html).
 
-For a detailed specification of API resources, see the [wiki](https://github.com/Hebo/twitch-sdk/wiki/API).
+For a detailed specification of API resources, see the [wiki](https://github.com/justintv/twitch-js-sdk/wiki/API).
 
 ## Loading
 
@@ -56,7 +56,7 @@ For a simple example of integrating the TwitchTV SDK with login functionality, p
 
 ![Authorize page][]
 
-[example implemention]: http://hebo.github.com/twitch-sdk/example.html
+[example implemention]: https://github.com/justintv/twitch-js-sdk/example.html
 [Authorize page]: http://ttv-api.s3.amazonaws.com/screenshots/authorize.png
 
 ## Core Methods
@@ -82,7 +82,7 @@ Initialize the TwitchTV API with your Client ID. This method must be called prio
 
 Make direct requests to the [TwitchTV API][] on behalf of your users. This method handles authorization, so any requests you make to the API will automatically be authenticated on behalf of the logged in user.
 
-[TwitchTV API]: https://github.com/Hebo/twitch-sdk/wiki/API
+[TwitchTV API]: https://github.com/justintv/twitch-js-sdk/wiki/API
 
 #### Usage
 

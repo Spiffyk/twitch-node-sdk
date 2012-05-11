@@ -2,14 +2,14 @@
   "name": "twitch-sdk",
   "version": "0.0.4",
   "description": "do stuff",
-  "homepage": "https://github.com/Hebo/twitch-sdk",
+  "homepage": "https://github.com/justintv/twitch-js-sdk",
   "author": {
     "name": "James Richard",
     "url": "http://james-richard.com"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/hebo/twitch-sdk.git"
+    "url": "https://github.com/justintv/twitch-js-sdk.git"
   },
   "devDependencies": {
     "uglify-js": "1.2.6",
