@@ -34,6 +34,36 @@ describe('API', function() {
         });
       });
 
+      describe('channels', function() {
+        it('can retrieve /channel', function(done) {
+          Twitch.api({method: 'channel'}, function(err, channel) {
+            wrap(done, function() {
+              should.not.exist(err);
+              should.exist(channel);
+              channel.should.have.property('stream_key');
+              channel.stream_key.should.include('live_');
+              channel.should.have.property('_links');
+              done();
+            });
+          });
+        });
+
+        it('can retrieve /channels/username', function(done) {
+          Twitch.api({method: 'channels/hebo'}, function(err, channel) {
+            wrap(done, function() {
+              should.not.exist(err);
+              should.exist(channel);
+              channel.should.not.have.property('stream_key');
+              channel.should.have.property('_links');
+              channel._links.should.have.property('commercial',
+                Twitch.baseUrl + 'channels/hebo/commercial'
+              );
+              done();
+            });
+          });
+        });
+      });
+
       it('can retrieve /channel', function(done) {
         Twitch.api({method: 'channel'}, function(err, channel) {
           wrap(done, function() {
