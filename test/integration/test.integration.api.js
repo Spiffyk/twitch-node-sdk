@@ -54,8 +54,7 @@ describe('API', function() {
               should.not.exist(err);
               should.exist(channel);
               channel.should.not.have.property('stream_key');
-              channel.should.have.property('_links');
-              channel._links.should.have.property('commercial',
+              channel.should.have.deep.property('_links.commercial',
                 Twitch.baseUrl + 'channels/hebo/commercial'
               );
               done();

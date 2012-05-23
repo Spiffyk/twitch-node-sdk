@@ -13,7 +13,7 @@
   },
   "devDependencies": {
     "uglify-js": "1.2.6",
-    "chai": "0.5.x",
+    "chai": "1.0.x",
     "mocha": "1.0.0",
     "sinon": "1.3.x",
     "docco": "latest",
