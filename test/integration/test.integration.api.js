@@ -74,6 +74,46 @@ describe('API', function() {
           });
         });
       });
+
+      describe('chat', function() {
+        it('can retrieve /chat/username', function(done) {
+          Twitch.api({method: 'chat/kraken_test_user'}, function(err, chat) {
+            wrap(done, function() {
+              should.not.exist(err);
+              should.exist(chat);
+
+              chat.should.have.deep.property('_links.emoticons',
+                Twitch.baseUrl + 'chat/kraken_test_user/emoticons'
+              );
+
+              chat.should.have.deep.property('_links.self',
+                Twitch.baseUrl + 'chat/kraken_test_user'
+              );
+
+              done();
+            });
+          });
+        });
+
+        it('can retrieve /chat/username/emoticons', function(done) {
+          Twitch.api({method: 'chat/kraken_test_user/emoticons'}, function(err, response) {
+            wrap(done, function() {
+              should.not.exist(err);
+              should.exist(response);
+
+              response.should.have.property('emoticons')
+              response.emoticons.should.be.a('Array').and.not.empty;
+
+              response.should.have.deep.property('_links.self',
+                Twitch.baseUrl + 'chat/kraken_test_user/emoticons'
+              );
+
+              done();
+            });
+          });
+        });
+
+      });
     });
 
     describe('responses', function() {
