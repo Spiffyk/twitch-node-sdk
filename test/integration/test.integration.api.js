@@ -105,11 +105,11 @@ describe('API', function() {
               response.emoticons.should.be.a('Array').and.not.empty;
 
               an_emoticon = response.emoticons[0];
-              an_emoticon.should.have.property('regex').to.be.a('string');
-              an_emoticon.should.have.property('global').to.be.a('boolean');
-              an_emoticon.should.have.property('url').to.be.a('string');
-              an_emoticon.should.have.property('height').to.be.a('number');
-              an_emoticon.should.have.property('width').to.be.a('number');
+              an_emoticon.should.have.property('regex').and.be.a('string');
+              an_emoticon.should.have.property('subscriber_only').and.be.a('boolean');
+              an_emoticon.should.have.property('url').and.be.a('string');
+              an_emoticon.should.have.property('height').and.be.a('number');
+              an_emoticon.should.have.property('width').and.be.a('number');
 
               response.should.have.deep.property('_links.self',
                 Twitch.baseUrl + 'chat/kraken_test_user/emoticons'
