@@ -122,22 +122,24 @@ describe('API', function() {
 
         it('can retrieve /chat/username/badges', function(done) {
           Twitch.api({method: 'chat/kraken_test_user/badges'}, function(err, response) {
-            should.not.exist(err);
-            should.exist(response);
+            wrap(done, function() {
+              should.not.exist(err);
+              should.exist(response);
 
-            response.should.have.property('badges');
-            response.badges.should.be.a('Array').and.not.empty;
+              response.should.have.property('badges');
+              response.badges.should.be.a('Array').and.not.empty;
 
-            badge = response.badges[0];
-            badge.should.have.property('type').and.be.a('string');
-            badge.should.have.property('title').and.be.a('string');
-            badge.should.have.property('url').and.be.a('string');
+              badge = response.badges[0];
+              badge.should.have.property('type').and.be.a('string');
+              badge.should.have.property('title').and.be.a('string');
+              badge.should.have.property('url').and.be.a('string');
 
-            response.should.have.deep.property('_links.self',
-              Twitch.baseUrl + 'chat/kraken_test_user/badges'
-            );
+              response.should.have.deep.property('_links.self',
+                Twitch.baseUrl + 'chat/kraken_test_user/badges'
+              );
 
-            done();
+              done();
+            });
           });
         });
 
