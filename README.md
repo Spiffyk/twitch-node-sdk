@@ -1,7 +1,6 @@
-# TwitchTV JavaScript SDK
+# Twitch JavaScript SDK
 
-__TODO:__ overview
-
+The Twitch JavaScript SDK provides rich functionality for accessing the Twitch API. This includes Twitch Connect, which allows users to bring their Twitch accounts into your application.
 
 Check out the [Project page](http://justintv.github.com/twitch-js-sdk).
 
@@ -11,7 +10,7 @@ For a detailed specification of API resources, see the [wiki](https://github.com
 
 ## Loading
 
-To integrate the TwitchTV JavaScript SDK on your site, follow these steps:
+To integrate the Twitch JavaScript SDK on your site, follow these steps:
 
 First, register a [new client application][]. Record the **Client ID** and **Client Secret** you receive in a safe place.
 
@@ -25,7 +24,7 @@ To load and initialize the SDK, add the following code to your page, filling in 
       });
     </script>
 
-You can now perform actions that do not require authorization or have your users log in to TwitchTV for additional permissions.
+You can now perform actions that do not require authorization or have your users log in to Twitch for additional permissions.
 
 [new client application]: http://www.twitch.tv/kraken/oauth2/clients/new
 
@@ -61,7 +60,7 @@ You may use these assets for the Twitch Connect button:
 
 ### Example
 
-For a simple example of integrating the TwitchTV SDK with login functionality, please check out the [example implemention][].
+For a simple example of integrating the Twitch SDK with login functionality, please check out the [example implemention][].
 
 ![Authorize page][]
 
@@ -72,7 +71,7 @@ For a simple example of integrating the TwitchTV SDK with login functionality, p
 
 ### Twitch.init
 
-Initialize the TwitchTV API with your Client ID. This method must be called prior to other actions. If the user is already authenticated, you can perform authenticated actions after initialization. Otherwise, you must call Twitch.login to have the user authorize your app. 
+Initialize the Twitch API with your Client ID. This method must be called prior to other actions. If the user is already authenticated, you can perform authenticated actions after initialization. Otherwise, you must call Twitch.login to have the user authorize your app. 
 
 #### Usage
 
@@ -89,9 +88,9 @@ Initialize the TwitchTV API with your Client ID. This method must be called prio
 
 ### Twitch.api
 
-Make direct requests to the [TwitchTV API][] on behalf of your users. This method handles authorization, so any requests you make to the API will automatically be authenticated on behalf of the logged in user.
+Make direct requests to the [Twitch API][] on behalf of your users. This method handles authorization, so any requests you make to the API will automatically be authenticated on behalf of the logged in user.
 
-[TwitchTV API]: https://github.com/justintv/twitch-js-sdk/wiki/API
+[Twitch API]: https://github.com/justintv/twitch-js-sdk/wiki/API
 
 #### Usage
 
@@ -102,11 +101,11 @@ Get the logged-in user's channel stream key:
     });
 
 ## Authentication
-The TwitchTV JavaScript SDK enables your users to log on or register using their TwitchTV accounts. The SDK handles synchronizing state between your site and TwitchTV, so users will stay logged in to your app as long as they have a valid access token.
+The Twitch JavaScript SDK enables your users to log on or register using their Twitch accounts. The SDK handles synchronizing state between your site and Twitch, so users will stay logged in to your app as long as they have a valid access token.
 
 ### Twitch.login
 
-Log in a user or request additional permissions. By default, the user will be directed to the TwitchTV sign in & approve page, then back to the same page. This page must be the `redirect_uri` you specified when creating the client. You may customize the `redirect_uri` if the user is currently on a different page. Make sure the JavaScript SDK is included on the `redirect_uri` page.
+Log in a user or request additional permissions. By default, the user will be directed to the Twitch sign in & approve page, then back to the same page. This page must be the `redirect_uri` you specified when creating the client. You may customize the `redirect_uri` if the user is currently on a different page. Make sure the JavaScript SDK is included on the `redirect_uri` page.
 
 Once the user is returned to the `redirect_uri` after authorization, the SDK will store the session infomation in [DOM Storage][] or cookies, so authentication will persist throughout your website. You may also store this token, associated with a user on your site, to make continued requests on behalf of that user.
 
