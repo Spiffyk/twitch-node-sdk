@@ -33,7 +33,7 @@ You can now perform actions that do not require authorization or have your users
 
 To add login functionality, first add the button to your page:
 
-    <img src="http://ttv-api.s3.amazonaws.com/twitch_connect.png" class="twitch-connect" href="#" />
+    <img src="http://ttv-api.s3.amazonaws.com/assets/connect_dark.png" class="twitch-connect" href="#" />
 
 Now add the JavaScript to trigger the login:
 
