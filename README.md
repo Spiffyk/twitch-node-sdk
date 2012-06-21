@@ -49,6 +49,15 @@ You probably only want to show the button when the user is not logged in, so add
       // Already logged in, hide button
       $('.twitch-connect').hide()
     }
+    
+#### Assets
+
+You may use these assets for the Twitch Connect button:
+
+![Connect Light](http://ttv-api.s3.amazonaws.com/assets/connect_light.png, "Connect Light")
+
+![Connect Dark](http://ttv-api.s3.amazonaws.com/assets/connect_dark.png, "Connect Dark")
+
 
 ### Example
 
