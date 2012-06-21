@@ -54,9 +54,9 @@ You probably only want to show the button when the user is not logged in, so add
 
 You may use these assets for the Twitch Connect button:
 
-![Connect Light](http://ttv-api.s3.amazonaws.com/assets/connect_light.png, "Connect Light")
+![Connect Light](http://ttv-api.s3.amazonaws.com/assets/connect_light.png)
 
-![Connect Dark](http://ttv-api.s3.amazonaws.com/assets/connect_dark.png, "Connect Dark")
+![Connect Dark](http://ttv-api.s3.amazonaws.com/assets/connect_dark.png)
 
 
 ### Example
