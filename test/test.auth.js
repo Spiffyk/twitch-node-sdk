@@ -1,9 +1,12 @@
-/*jshint expr:true*/
+/*jshint expr:true undef:false*/
+var reset = function() {
+  document.location.hash = '';
+  Twitch._config = {};
+};
+
 describe('Authentication', function() {
   describe('#_parseFragment()', function() {
-    after(function() {
-      document.location.hash = '';
-    });
+    before(reset);
 
     it('should extract params from location hash', function() {
       var hash = "access_token=ew35h4pk0xg7iy1" +
@@ -40,10 +43,32 @@ describe('Authentication', function() {
     });
   });
 
-  describe('#getStatus()', function() {
+  describe('#getToken()', function() {
+    before(reset);
+
     before(function() {
       var hash = "access_token=ew35h4pk0xg7iy1" +
-             "&scope=user_read+channel_read&state=user_dayjay";
+             "&scope=user_read";
+
+      document.location.hash = hash;
+    });
+
+    it('should be null before init', function() {
+      should.not.exist(Twitch.getToken());
+    });
+
+    it('should return oauth token', function() {
+      Twitch.init({clientId: 'myclientid'});
+      Twitch.getToken().should.equal('ew35h4pk0xg7iy1');
+    });
+  });
+
+  describe('#getStatus()', function() {
+    before(reset);
+
+    before(function() {
+      var hash = "access_token=ew35h4pk0xg7iy1" +
+             "&scope=user_read";
 
       document.location.hash = hash;
     });
@@ -100,6 +125,8 @@ describe('Authentication', function() {
   });
 
   describe('#login()', function() {
+    before(reset);
+
     beforeEach(function() {
       sinon.stub(window, 'open');
       Twitch.init({clientId: 'myclientid'});
@@ -171,6 +198,8 @@ describe('Authentication', function() {
   });
 
   describe('#logout()', function() {
+    before(reset);
+
     beforeEach(function() {
       Twitch.init({clientId: 'myclientid'});
       Twitch._config.session = {
@@ -207,6 +236,8 @@ describe('Authentication', function() {
   });
 
   describe('#initSession()', function() {
+    before(reset);
+
     before(function() {
       var hash = "access_token=ew35h4pk0xg7iy1" +
              "&scope=user_read+channel_read&state=user_dayjay";
