@@ -225,6 +225,7 @@
   });
 })();
 /*jshint expr:true*/
+/*global Twitch*/
 // ## Authentication
 (function() {
   // Key of the sessionStorage object or cookie.
@@ -271,6 +272,12 @@
 
       callback && callback(null, session);
     });
+  };
+
+  // Get the currently stored OAuth token.
+  // Useful for sending OAuth tokens to your backend.
+  var getToken = function() {
+    return Twitch._config.session && Twitch._config.session.token;
   };
 
   // Get the current authentication status. Will try to use the stored session
@@ -410,6 +417,7 @@
   Twitch.extend({
     _initSession: initSession,
     _parseFragment: parseFragment,
+    getToken: getToken,
     getStatus: getStatus,
     login: login,
     logout: logout
