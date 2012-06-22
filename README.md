@@ -149,6 +149,15 @@ Force an update of the status:
       }
     }
 
+### Twitch.getToken
+
+Retrieve the current OAuth token for a user, if one exists. This is useful for persisting an OAuth token to your backend.
+
+#### Usage
+
+    var token = Twitch.getToken()
+    alert(token)
+
 ## Events
 
 Most JavaScript-heavy apps use events to be notified of state changes. Some changes might occur due to user actions outside your app's control, so the only way to be notified is through events.
