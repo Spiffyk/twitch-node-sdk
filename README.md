@@ -58,9 +58,9 @@ You may use these assets for the Twitch Connect button:
 ![Connect Dark](http://ttv-api.s3.amazonaws.com/assets/connect_dark.png)
 
 
-### Example
+## Integration Example
 
-For a simple example of integrating the Twitch SDK with login functionality, please check out the [example implemention][].
+For an example of integrating the Twitch SDK with login functionality, please check out the [example implemention][].
 
 ![Authorize page][]
 
