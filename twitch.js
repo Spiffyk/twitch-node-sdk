@@ -333,7 +333,9 @@
     var params = {
       response_type: 'token',
       client_id: Twitch._config.clientId,
-      redirect_uri: options.redirect_uri || window.location.href,
+      // Redirecting to a fragment is forbidden by the OAuth spec,
+      // but we might be on a page with one.
+      redirect_uri: options.redirect_uri || window.location.href.replace(/#.*$/, ''),
       scope: options.scope.join(' ')
     };
 
