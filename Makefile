@@ -13,6 +13,7 @@ test: twitch.js
 
 docs: twitch.js
 	$(NODE_BIN)docco twitch.js
+	mv docs docco
 
 twitch.js: $(SRC)
 	cat $^ > $@
