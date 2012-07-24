@@ -6,7 +6,7 @@ Check out the [Project page](http://justintv.github.com/twitch-js-sdk).
 
 You might also be interested in the [annotated source code](http://justintv.github.com/twitch-js-sdk/docs/twitch.html).
 
-For a detailed specification of API resources, see the [wiki](https://github.com/justintv/twitch-js-sdk/wiki/API).
+For a detailed specification of API resources, see the [wiki](https://github.com/justintv/Twitch-API/wiki/API).
 
 ## Loading
 
