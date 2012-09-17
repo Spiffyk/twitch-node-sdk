@@ -16,13 +16,15 @@ First, register a [new client application][]. Record the **Client ID** and **Cli
 
 To load and initialize the SDK, add the following code to your page, filling in the __Client ID__ of your app:
 
-    <script src="https://ttv-api.s3.amazonaws.com/twitch.min.js"></script>
+```html
+<script src="https://ttv-api.s3.amazonaws.com/twitch.min.js"></script>
 
-    <script>
-      Twitch.init({clientId: 'YOUR_CLIENT_ID_HERE'}, function(error, status) {
-        // the sdk is now loaded
-      });
-    </script>
+<script>
+  Twitch.init({clientId: 'YOUR_CLIENT_ID_HERE'}, function(error, status) {
+    // the sdk is now loaded
+  });
+</script>
+```
 
 You can now perform actions that do not require authorization or have your users log in to Twitch for additional permissions.
 
@@ -32,23 +34,29 @@ You can now perform actions that do not require authorization or have your users
 
 To add login functionality, first add the button to your page:
 
-    <img src="http://ttv-api.s3.amazonaws.com/assets/connect_dark.png" class="twitch-connect" href="#" />
+```html
+<img src="http://ttv-api.s3.amazonaws.com/assets/connect_dark.png" class="twitch-connect" href="#" />
+```
 
 Now add the JavaScript to trigger the login:
 
-    $('.twitch-connect').click(function() {
-      Twitch.login({
-        scope: ['user_read', 'channel_read']
-      });
-    })
+```javascript
+$('.twitch-connect').click(function() {
+  Twitch.login({
+    scope: ['user_read', 'channel_read']
+  });
+})
+```
 
 You probably only want to show the button when the user is not logged in, so add this to the callback on Twitch.init:
 
-    if (status.authenticated) {
-      // Already logged in, hide button
-      $('.twitch-connect').hide()
-    }
-    
+```javascript
+if (status.authenticated) {
+  // Already logged in, hide button
+  $('.twitch-connect').hide()
+}
+```
+
 #### Assets
 
 You may use these assets for the Twitch Connect button:
@@ -75,16 +83,18 @@ Initialize the Twitch API with your Client ID. This method must be called prior 
 
 #### Usage
 
-    Twitch.init({clientId: 'YOUR_CLIENT_ID_HERE'}, function(error, status) {
-      if (error) {
-        // error encountered while loading
-        console.log(error);
-      }
-      // the sdk is now loaded
-      if (status.authenticated) {
-        // user is currently logged in
-      }
-    });
+```javascript
+Twitch.init({clientId: 'YOUR_CLIENT_ID_HERE'}, function(error, status) {
+  if (error) {
+    // error encountered while loading
+    console.log(error);
+  }
+  // the sdk is now loaded
+  if (status.authenticated) {
+    // user is currently logged in
+  }
+});
+```
 
 ### Twitch.api
 
@@ -96,9 +106,11 @@ Make direct requests to the [Twitch API][] on behalf of your users. This method 
 
 Get the logged-in user's channel stream key:
 
-    Twitch.api({method: 'channel'}, function(error, channel) {
-      console.log(channel.stream_key);
-    });
+```javascript
+Twitch.api({method: 'channel'}, function(error, channel) {
+  console.log(channel.stream_key);
+});
+```
 
 ## Authentication
 The Twitch JavaScript SDK enables your users to log on or register using their Twitch accounts. The SDK handles synchronizing state between your site and Twitch, so users will stay logged in to your app as long as they have a valid access token.
@@ -113,11 +125,13 @@ Once the user is returned to the `redirect_uri` after authorization, the SDK wil
 
 #### Usage
 
-    Twitch.login({
-      scope: ['user_read', 'channel_read']
-    });
+```javascript
+Twitch.login({
+  scope: ['user_read', 'channel_read']
+});
 
-    TODO: args list, scopes, popups for advanced functionality
+TODO: args list, scopes, popups for advanced functionality
+```
 
 ### Twitch.logout
 
@@ -125,9 +139,11 @@ Reset the session and delete from persistent storage, which is akin to logging o
 
 #### Usage
 
-    Twitch.logout(function(error) {
-        // the user is now logged out
-    });
+```javascript
+Twitch.logout(function(error) {
+    // the user is now logged out
+});
+```
 
 ### Twitch.getStatus
 
@@ -135,19 +151,23 @@ Retrieve the current login status of a user. Whenever possible, `getStatus` will
 
 #### Usage
 
-    Twitch.getStatus(function(err, status) {
-      if (status.authenticated) {
-        console.log('authenticated!')
-      }
-    }
+```javascript
+Twitch.getStatus(function(err, status) {
+  if (status.authenticated) {
+    console.log('authenticated!')
+  }
+}
+```
 
 Force an update of the status:
 
-    Twitch.getStatus({force: true}, function(err, status) {
-      if (status.authenticated) {
-        console.log('authenticated!')
-      }
-    }
+```javascript
+Twitch.getStatus({force: true}, function(err, status) {
+  if (status.authenticated) {
+    console.log('authenticated!')
+  }
+}
+```
 
 ### Twitch.getToken
 
@@ -155,8 +175,10 @@ Retrieve the current OAuth token for a user, if one exists. This is useful for p
 
 #### Usage
 
-    var token = Twitch.getToken()
-    alert(token)
+```javascript
+var token = Twitch.getToken()
+alert(token)
+```
 
 ## Events
 
@@ -164,18 +186,22 @@ Most JavaScript-heavy apps use events to be notified of state changes. Some chan
 
 `Twitch.events.addListener` allows you to subscribe to an event:
 
-    Twitch.events.addListener('auth.login', function() {
-      // user is logged in
-    });
+```javascript
+Twitch.events.addListener('auth.login', function() {
+  // user is logged in
+});
+```
 
 `Twitch.events.removeListener` allows you to remove listeners for an event:
 
-    var handleLogin = function() {
-      alert('you're logged in!);
-    };
+```javascript
+var handleLogin = function() {
+  alert('you're logged in!);
+};
 
-    Twitch.events.addListener('auth.login', handleLogin);
-    Twitch.events.removeListener('auth.login', handleLogin);
+Twitch.events.addListener('auth.login', handleLogin);
+Twitch.events.removeListener('auth.login', handleLogin);
+```
 
 `Twitch.events.removeAllListeners` allows you to remove all listeners for an event.
 
@@ -191,19 +217,27 @@ This event is emitted when we no longer have a valid session for a user. This me
 
 ### Building
 
-    make
+```bash
+make
+```
 
 ### Tests
 
-    make test
+```bash
+make test
+```
 
 ### Docs
 
 Install pygments as described [here](https://github.com/mojombo/jekyll/wiki/install)
 
-    make docs
+```bash
+make docs
+```
 
 To update the docs on github pages:
 
-    git checkout gh-pages
-    make
+```bash
+git checkout gh-pages
+make
+```
