@@ -1,4 +1,4 @@
-/*jshint expr:true*/
+/*jshint expr:true undef:false*/
 
 // We need to wrap jsonp to get mocha to know about assertion errors
 // since we're in a new call stack
@@ -33,32 +33,32 @@ describe('API', function() {
           });
         });
       });
+    });
 
-      describe('channels', function() {
-        it('can retrieve /channel', function(done) {
-          Twitch.api({method: 'channel'}, function(err, channel) {
-            wrap(done, function() {
-              should.not.exist(err);
-              should.exist(channel);
-              channel.should.have.property('stream_key');
-              channel.stream_key.should.include('live_');
-              channel.should.have.property('_links');
-              done();
-            });
+    describe('channels', function() {
+      it('can retrieve /channel', function(done) {
+        Twitch.api({method: 'channel'}, function(err, channel) {
+          wrap(done, function() {
+            should.not.exist(err);
+            should.exist(channel);
+            channel.should.have.property('stream_key');
+            channel.stream_key.should.include('live_');
+            channel.should.have.property('_links');
+            done();
           });
         });
+      });
 
-        it('can retrieve /channels/username', function(done) {
-          Twitch.api({method: 'channels/hebo'}, function(err, channel) {
-            wrap(done, function() {
-              should.not.exist(err);
-              should.exist(channel);
-              channel.should.not.have.property('stream_key');
-              channel.should.have.deep.property('_links.commercial',
-                Twitch.baseUrl + 'channels/hebo/commercial'
-              );
-              done();
-            });
+      it('can retrieve /channels/username', function(done) {
+        Twitch.api({method: 'channels/hebo'}, function(err, channel) {
+          wrap(done, function() {
+            should.not.exist(err);
+            should.exist(channel);
+            channel.should.not.have.property('stream_key');
+            channel.should.have.deep.property('_links.commercial',
+              Twitch.baseUrl + 'channels/hebo/commercial'
+            );
+            done();
           });
         });
       });
@@ -75,74 +75,85 @@ describe('API', function() {
         });
       });
 
-      describe('chat', function() {
-        it('can retrieve /chat/username', function(done) {
-          Twitch.api({method: 'chat/kraken_test_user'}, function(err, chat) {
+      it('can trigger a commercial', function(done) {
+        Twitch.api({url: 'user'}, function(err, user) {
+          should.not.exist(err);
+          Twitch.api({url: 'channels/' + user.name + '/commercial', verb: 'POST'}, function(err, res) {
             wrap(done, function() {
               should.not.exist(err);
-              should.exist(chat);
-
-              chat.should.have.deep.property('_links.emoticons',
-                Twitch.baseUrl + 'chat/kraken_test_user/emoticons'
-              );
-
-              chat.should.have.deep.property('_links.self',
-                Twitch.baseUrl + 'chat/kraken_test_user'
-              );
-
               done();
             });
           });
         });
+      });
+    });
 
-        it('can retrieve /chat/username/emoticons', function(done) {
-          Twitch.api({method: 'chat/kraken_test_user/emoticons'}, function(err, response) {
-            wrap(done, function() {
-              should.not.exist(err);
-              should.exist(response);
+    describe('chat', function() {
+      it('can retrieve /chat/username', function(done) {
+        Twitch.api({method: 'chat/kraken_test_user'}, function(err, chat) {
+          wrap(done, function() {
+            should.not.exist(err);
+            should.exist(chat);
 
-              response.should.have.property('emoticons');
-              response.emoticons.should.be.a('Array').and.not.empty;
+            chat.should.have.deep.property('_links.emoticons',
+              Twitch.baseUrl + 'chat/kraken_test_user/emoticons'
+            );
 
-              an_emoticon = response.emoticons[0];
-              an_emoticon.should.have.property('regex').and.be.a('string');
-              an_emoticon.should.have.property('subscriber_only').and.be.a('boolean');
-              an_emoticon.should.have.property('url').and.be.a('string');
-              an_emoticon.should.have.property('height').and.be.a('number');
-              an_emoticon.should.have.property('width').and.be.a('number');
+            chat.should.have.deep.property('_links.self',
+              Twitch.baseUrl + 'chat/kraken_test_user'
+            );
 
-              response.should.have.deep.property('_links.self',
-                Twitch.baseUrl + 'chat/kraken_test_user/emoticons'
-              );
-
-              done();
-            });
+            done();
           });
         });
+      });
 
-        it('can retrieve /chat/username/badges', function(done) {
-          Twitch.api({method: 'chat/kraken_test_user/badges'}, function(err, response) {
-            wrap(done, function() {
-              should.not.exist(err);
-              should.exist(response);
+      it('can retrieve /chat/username/emoticons', function(done) {
+        Twitch.api({method: 'chat/kraken_test_user/emoticons'}, function(err, response) {
+          wrap(done, function() {
+            should.not.exist(err);
+            should.exist(response);
 
-              response.should.have.property('badges');
-              response.badges.should.be.a('Array').and.not.empty;
+            response.should.have.property('emoticons');
+            response.emoticons.should.be.a('Array').and.not.empty;
 
-              badge = response.badges[0];
-              badge.should.have.property('type').and.be.a('string');
-              badge.should.have.property('title').and.be.a('string');
-              badge.should.have.property('url').and.be.a('string');
+            an_emoticon = response.emoticons[0];
+            an_emoticon.should.have.property('regex').and.be.a('string');
+            an_emoticon.should.have.property('subscriber_only').and.be.a('boolean');
+            an_emoticon.should.have.property('url').and.be.a('string');
+            an_emoticon.should.have.property('height').and.be.a('number');
+            an_emoticon.should.have.property('width').and.be.a('number');
 
-              response.should.have.deep.property('_links.self',
-                Twitch.baseUrl + 'chat/kraken_test_user/badges'
-              );
+            response.should.have.deep.property('_links.self',
+              Twitch.baseUrl + 'chat/kraken_test_user/emoticons'
+            );
 
-              done();
-            });
+            done();
           });
         });
+      });
 
+      it('can retrieve /chat/username/badges', function(done) {
+        Twitch.api({method: 'chat/kraken_test_user/badges'}, function(err, response) {
+          wrap(done, function() {
+            should.not.exist(err);
+            should.exist(response);
+
+            response.should.have.property('badges');
+            response.badges.should.be.a('Array').and.not.empty;
+
+            badge = response.badges[0];
+            badge.should.have.property('type').and.be.a('string');
+            badge.should.have.property('title').and.be.a('string');
+            badge.should.have.property('url').and.be.a('string');
+
+            response.should.have.deep.property('_links.self',
+              Twitch.baseUrl + 'chat/kraken_test_user/badges'
+            );
+
+            done();
+          });
+        });
       });
     });
 

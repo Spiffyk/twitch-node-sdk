@@ -26,11 +26,11 @@
     callback = callback || function() {};
 
     var authenticated = !!Twitch._config.session.token,
-      url = Twitch.baseUrl + (options.method || '');
+      url = Twitch.baseUrl + (options.url || options.method || '');
 
-    if (authenticated) {
-      params.oauth_token = Twitch._config.session.token;
-    }
+    if (authenticated) params.oauth_token = Twitch._config.session.token;
+    if (options.verb) params._method = options.verb;
+
 
     // When using JSONP, any error response will have a
     // `200` HTTP status code with the actual code in the body
@@ -41,9 +41,10 @@
       timeout : REQUEST_TIMEOUT
     })
     .done(function(data) {
+      // 204 No Content has no data object
       Twitch.log('Response Data:', data);
-      if (!data.error) {
-        callback(null, data);
+      if ( !(data && data.error) ) {
+        callback(null, data || null);
         return;
       }
 

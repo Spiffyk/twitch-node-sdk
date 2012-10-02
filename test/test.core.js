@@ -1,4 +1,4 @@
-/*jshint expr:true*/
+/*jshint expr:true undef:false*/
 describe('Core', function() {
   before(function() {
     document.location.hash = '';
@@ -64,15 +64,26 @@ describe('Core', function() {
       });
     });
 
-    it('sets method on requests', function() {
+    it('sets url on requests', function() {
       Twitch.init({clientId: 'myclientid'});
 
-      Twitch.api({method: 'user'});
+      Twitch.api({url: 'user'});
       $.ajax.lastCall.calledWith({
         dataType: 'jsonp',
         timeout: 5000,
         url: Twitch.baseUrl + 'user?'
-      }).should.be['true'];
+      }).should.be.ok;
+    });
+
+    it('sets http verb on requests', function() {
+      Twitch.init({clientId: 'myclientid'});
+
+      Twitch.api({url: 'user', verb: 'POST'});
+      sinon.assert.calledWith($.ajax, {
+        dataType: 'jsonp',
+        timeout: 5000,
+        url: Twitch.baseUrl + 'user?_method=POST'
+      });
     });
 
     it('logs out on unauthorized request', function(done) {

@@ -36,7 +36,7 @@
         Twitch.login({
           redirect_uri: REDIRECT_URI,
           popup: true,
-          scope: ['user_read', 'channel_read']
+          scope: ['user_read', 'channel_read', 'channel_commercial']
         });
         $('.fragment-entry').removeClass('hidden')
       })
