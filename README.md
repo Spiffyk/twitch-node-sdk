@@ -196,7 +196,7 @@ Twitch.events.addListener('auth.login', function() {
 
 ```javascript
 var handleLogin = function() {
-  alert('you're logged in!);
+  alert("you're logged in!");
 };
 
 Twitch.events.addListener('auth.login', handleLogin);
