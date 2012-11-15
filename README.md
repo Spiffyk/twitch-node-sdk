@@ -112,6 +112,15 @@ Twitch.api({method: 'channel'}, function(error, channel) {
 });
 ```
 
+If the request you wish to make supports optional [parameters] to augment the amount or type of data received, you may add them to your call by adding a 'params' sub-hash:
+
+```javascript
+Twitch.api({method: 'streams', params: {game:'Diablo III', limit:3} }, function(error, list) {
+  console.debug(list);
+});
+```
+[parameters]: https://github.com/justintv/Twitch-API/blob/master/resources/streams.md#parameters
+
 ## Authentication
 The Twitch JavaScript SDK enables your users to log on or register using their Twitch accounts. The SDK handles synchronizing state between your site and Twitch, so users will stay logged in to your app as long as they have a valid access token.
 
