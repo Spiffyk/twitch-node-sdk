@@ -112,7 +112,7 @@ Twitch.api({method: 'channel'}, function(error, channel) {
 });
 ```
 
-If the request you wish to make supports optional [parameters] to augment the amount or type of data receieved, you may add them to your call by adding a 'params' sub-hash:
+If the request you wish to make supports optional [parameters] to augment the amount or type of data received, you may add them to your call by adding a 'params' sub-hash:
 
 ```javascript
 Twitch.api({method: 'streams', params: {game:'Diablo III', limit:3} }, function(error, list) {
