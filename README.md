@@ -163,9 +163,9 @@ Retrieve the current login status of a user. Whenever possible, `getStatus` will
 ```javascript
 Twitch.getStatus(function(err, status) {
   if (status.authenticated) {
-    console.log('authenticated!')
+    console.log('authenticated!');
   }
-}
+});
 ```
 
 Force an update of the status:
