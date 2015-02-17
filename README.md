@@ -121,6 +121,16 @@ Twitch.api({method: 'streams', params: {game:'Diablo III', limit:3} }, function(
 ```
 [parameters]: https://github.com/justintv/Twitch-API/blob/master/resources/streams.md#parameters
 
+#### API PUT and DELETE example
+
+Some API endpoints require different HTTP methods, you can achieve this using the verb parameter.
+
+```javascript
+Twitch.api({method: '/users/:user/follows/channels/:target', verb: 'PUT' }, function([...]) {
+  [...]
+});
+```
+
 ## Authentication
 The Twitch JavaScript SDK enables your users to log on or register using their Twitch accounts. The SDK handles synchronizing state between your site and Twitch, so users will stay logged in to your app as long as they have a valid access token.
 
