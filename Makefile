@@ -6,7 +6,7 @@ SRC = lib/twitch.core.js \
 	lib/twitch.auth.js \
 	lib/twitch.events.js
 
-all: twitch.min.js docs
+all: twitch.js docs
 
 test: twitch.js
 	node test/server.js
@@ -18,10 +18,7 @@ docs: twitch.js
 twitch.js: $(SRC)
 	cat $^ > $@
 
-twitch.min.js: twitch.js
-	$(NODE_BIN)uglifyjs --no-mangle $< > $@
-
 clean:
-	rm -f twitch{,.min}.js
+	rm -f twitch.js
 
 .PHONY: test docs

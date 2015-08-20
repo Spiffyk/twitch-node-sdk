@@ -1,29 +1,23 @@
-# Twitch JavaScript SDK
+# Twitch Node.js SDK
 
-The Twitch JavaScript SDK provides rich functionality for accessing the Twitch API. This includes Twitch Connect, which allows users to bring their Twitch accounts into your application.
-
-Check out the [Project page](http://justintv.github.com/twitch-js-sdk).
-
-You might also be interested in the [annotated source code](http://justintv.github.com/twitch-js-sdk/docs/twitch.html).
+The Twitch Node.js SDK provides rich functionality for accessing the Twitch API. This includes Twitch Connect, which allows users to bring their Twitch accounts into your application. It is a fork of the official [Twitch JavaScript SDK](http://github.com/justintv/twitch-js-sdk), edited for use with Node.js or IO.js.
 
 For a detailed specification of API resources, see the [wiki](https://github.com/justintv/Twitch-API/wiki/API).
 
 ## Loading
 
-To integrate the Twitch JavaScript SDK on your site, follow these steps:
+To integrate the Twitch JavaScript SDK in your Node application, follow these steps:
 
 First, register a [new client application][]. Record the **Client ID** and **Client Secret** you receive in a safe place.
 
-To load and initialize the SDK, add the following code to your page, filling in the __Client ID__ of your app:
+To load and initialize the SDK, add the following code to your main file, filling in the __Client ID__ of your app:
 
-```html
-<script src="https://ttv-api.s3.amazonaws.com/twitch.min.js"></script>
+```javascript
+var Twitch = require("twitch-sdk");
 
-<script>
-  Twitch.init({clientId: 'YOUR_CLIENT_ID_HERE'}, function(error, status) {
-    // the sdk is now loaded
-  });
-</script>
+Twitch.init({clientId: 'YOUR_CLIENT_ID_HERE'}, function(error, status) {
+  // the sdk is now loaded
+});
 ```
 
 You can now perform actions that do not require authorization or have your users log in to Twitch for additional permissions.
@@ -79,7 +73,7 @@ For an example of integrating the Twitch SDK with login functionality, please ch
 
 ### Twitch.init
 
-Initialize the Twitch API with your Client ID. This method must be called prior to other actions. If the user is already authenticated, you can perform authenticated actions after initialization. Otherwise, you must call Twitch.login to have the user authorize your app. 
+Initialize the Twitch API with your Client ID. This method must be called prior to other actions. If the user is already authenticated, you can perform authenticated actions after initialization. Otherwise, you must call Twitch.login to have the user authorize your app.
 
 #### Usage
 
@@ -226,7 +220,7 @@ Twitch.events.removeListener('auth.login', handleLogin);
 
 ### auth.login
 
-This event is emitted when we initialize a session for a user, either because the current page is a login `redirect_uri` or we have restored the session from persistent storage. 
+This event is emitted when we initialize a session for a user, either because the current page is a login `redirect_uri` or we have restored the session from persistent storage.
 
 ### auth.logout
 
