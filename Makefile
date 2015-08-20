@@ -8,9 +8,6 @@ SRC = lib/twitch.core.js \
 
 all: twitch.js docs
 
-test: twitch.js
-	node test/server.js
-
 docs: twitch.js
 	$(NODE_BIN)docco twitch.js
 	mv docs docco
@@ -21,4 +18,4 @@ twitch.js: $(SRC)
 clean:
 	rm -f twitch.js
 
-.PHONY: test docs
+.PHONY: docs

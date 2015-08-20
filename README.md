@@ -26,6 +26,8 @@ You can now perform actions that do not require authorization or have your users
 
 ### Login
 
+You need a tool like [NW.js](http://nwjs.io) for login to work.
+
 To add login functionality, first add the button to your page:
 
 ```html
@@ -58,16 +60,6 @@ You may use these assets for the Twitch Connect button:
 ![Connect Light](http://ttv-api.s3.amazonaws.com/assets/connect_light.png)
 
 ![Connect Dark](http://ttv-api.s3.amazonaws.com/assets/connect_dark.png)
-
-
-## Integration Example
-
-For an example of integrating the Twitch SDK with login functionality, please check out the [example implemention][].
-
-![Authorize page][]
-
-[example implemention]: http://justintv.github.com/twitch-js-sdk/example.html
-[Authorize page]: http://ttv-api.s3.amazonaws.com/screenshots/authorize.png
 
 ## Core Methods
 
