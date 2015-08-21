@@ -1,6 +1,6 @@
 # Twitch Node.js SDK
 
-The Twitch Node.js SDK provides rich functionality for accessing the Twitch API. This includes Twitch Connect, which allows users to bring their Twitch accounts into your application. It is a fork of the official [Twitch JavaScript SDK](http://github.com/justintv/twitch-js-sdk), edited for use with Node.js or IO.js.
+The Twitch Node.js SDK provides rich functionality for accessing the Twitch API. This includes Twitch Connect, which allows users to bring their Twitch accounts into your application. It is a fork of the official [Twitch JavaScript SDK](http://github.com/justintv/twitch-js-sdk), edited for use with Node.js, IO.js or NW.js.
 
 For a detailed specification of API resources, see the [wiki](https://github.com/justintv/Twitch-API/wiki/API).
 
@@ -26,7 +26,7 @@ You can now perform actions that do not require authorization or have your users
 
 ### Login
 
-You need a tool like [NW.js](http://nwjs.io) for login to work.
+You need [NW.js](http://nwjs.io) (or a compatible runtime) for login to work.
 
 To add login functionality, first add the button to your page:
 
@@ -220,29 +220,20 @@ This event is emitted when we no longer have a valid session for a user. This me
 
 ## Development
 
+First, install all the pre-requisites with npm
+
+```bash
+npm install
+```
+
 ### Building
 
 ```bash
 make
 ```
 
-### Tests
-
-```bash
-make test
-```
-
 ### Docs
-
-Install pygments as described [here](https://github.com/mojombo/jekyll/wiki/install)
 
 ```bash
 make docs
-```
-
-To update the docs on github pages:
-
-```bash
-git checkout gh-pages
-make
 ```
