@@ -2,7 +2,7 @@ var https = require('https');
 var fs = require('fs');
 var path = require('path');
 
-var gui;
+var gui = false;
 
 var Twitch, storage, initSession, parseFragment,
 	config = {};
@@ -32,6 +32,8 @@ function param(array) {
 
   Twitch = {
     baseUrl: 'https://api.twitch.tv/kraken/',
+    baseHost: 'api.twitch.tv',
+    basePath: '/kraken/',
     extend: function(options) {
     	var target = Twitch;
 
@@ -43,9 +45,6 @@ function param(array) {
     }
   };
 
-  Twitch.baseUrl.host = 'api.twitch.tv';
-  Twitch.baseUrl.path = '/kraken';
-
   // Perform requests to the TwitchTV API. This is a fairly low-level
   // interface, so most clients are better served by using a related
   // high-level function if one exists.
@@ -53,17 +52,18 @@ function param(array) {
     if (!config.session) {
       throw new Error('You must call init() before api()');
     }
+
     var params = options.params || {};
     callback = callback || function() {};
 
     var authenticated = !!config.session.token,
-      url = Twitch.baseUrl.path + (options.url || options.method || '');
+      url = Twitch.basePath + (options.url || options.method || '');
 
     if (authenticated) params.oauth_token = config.session.token;
 
 
     var request_options = {
-      host: Twitch.baseUrl.host,
+      host: Twitch.baseHost,
       path: url + '?' + param(params),
       method: options.verb || 'GET',
       headers: {
@@ -74,10 +74,15 @@ function param(array) {
 
     var req = https.request(request_options, function(res) {
       Twitch.log('Response status:', res.statusCode, res.statusMessage);
+      res.setEncoding('utf8');
 
-      res.encoding = 'utf8';
+      var responseBody = "";
       res.on('data', function(data) {
-        data = JSON.parse(data);
+        responseBody += data;
+      });
+
+      res.on('end', function() {
+        var data = JSON.parse(responseBody);
 
         Twitch.log('Response Data:', data);
         if ( !(data && data.error) ) {
@@ -94,11 +99,11 @@ function param(array) {
         } else {
           callback(data, null);
         }
-      });
+      })
     });
 
     req.on('error', function (e) {
-      Twitch.log('HTTP Request Error:', e);
+      callback(e, null);
     });
 
     req.end();
@@ -107,10 +112,12 @@ function param(array) {
   // Log messages to the browser console if available, prefixed
   // with `[Twitch]`.
   Twitch.log = function(message) {
+    /*
     Array.prototype.unshift.call(arguments, '[Twitch]');
-    if (window.console) {
-      console.log.apply(console, arguments);
-    }
+    console.log.apply(console, arguments);
+    */
+
+    console.log('[Twitch]', message);
   };
 })();
 // ## Initialization
@@ -138,8 +145,11 @@ function param(array) {
     }
 
     config.clientId = options.clientId;
-    gui = options.nw || false;
-    
+
+    if (options.nw) {
+      gui = options.nw;
+    }
+
     initSession();
 
     if (typeof callback === 'function') {
@@ -280,12 +290,11 @@ function param(array) {
       width: 660,
       height: 600,
       toolbar: false,
+      show: false,
       resizable: true
     });
 
     win.on('loaded', function() {
-      console.log('Yup, it\'s working');
-
       var w = win.window;
       if (w.location.hostname == 'api.twitch.tv' && w.location.pathname == '/kraken/') {
         config.session = parseFragment(w.location.hash);
@@ -297,6 +306,9 @@ function param(array) {
         });
 
         win.close();
+      }
+      else {
+        win.show();
       }
     });
   };
