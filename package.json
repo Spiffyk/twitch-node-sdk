@@ -1,7 +1,7 @@
 {
   "name": "twitch-sdk",
   "version": "0.1.0",
-  "description": "An fork of the official Twitch JS SDK for Node.js",
+  "description": "The Twitch JavaScript SDK rewritten for use with Node.js, IO.js or NW.js",
   "homepage": "https://github.com/spiffyk/twitch-node-sdk",
   "author": {
     "name": "Spiffyk",
