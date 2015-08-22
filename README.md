@@ -28,7 +28,9 @@ You can now perform actions that do not require authorization or have your users
 
 You need [NW.js](http://nwjs.io) (or a compatible runtime) for login to work.
 
-To add login functionality, first add the button to your page:
+First, you need to set your redirect URI. Go to the Twitch Connections settings of your app and set the *Redirect URI* to `https://api.twitch.tv/kraken/`. The SDK uses that as the 'dummy' page to retrieve its tokens.
+
+To add login functionality, add the button to your page:
 
 ```html
 <img src="http://ttv-api.s3.amazonaws.com/assets/connect_dark.png" class="twitch-connect" href="#" />
@@ -65,12 +67,18 @@ You may use these assets for the Twitch Connect button:
 
 ### Twitch.init
 
-Initialize the Twitch API with your Client ID. This method must be called prior to other actions. If the user is already authenticated, you can perform authenticated actions after initialization. Otherwise, you must call Twitch.login to have the user authorize your app.
+Initialize the Twitch API with your Client ID. This method must be called prior to other actions.
+
+If you want your users to be able to authenticate, you need to use an [NW.js](http://nwjs.io)-compatible runtime to show the login popup. In that case you also need to initialize the Twitch API with the ``nw.gui`` object.
 
 #### Usage
 
 ```javascript
-Twitch.init({clientId: 'YOUR_CLIENT_ID_HERE'}, function(error, status) {
+// For use with NW.js-compatible runtime
+
+var gui = require('nw.gui');
+
+Twitch.init({clientId: 'YOUR_CLIENT_ID_HERE', nw: gui}, function(error, status) {
   if (error) {
     // error encountered while loading
     console.log(error);
@@ -86,7 +94,7 @@ Twitch.init({clientId: 'YOUR_CLIENT_ID_HERE'}, function(error, status) {
 
 Make direct requests to the [Twitch API][] on behalf of your users. This method handles authorization, so any requests you make to the API will automatically be authenticated on behalf of the logged in user.
 
-[Twitch API]: https://github.com/justintv/twitch-js-sdk/wiki/API
+[Twitch API]: https://github.com/justintv/Twitch-API
 
 #### Usage
 
@@ -122,9 +130,9 @@ The Twitch JavaScript SDK enables your users to log on or register using their T
 
 ### Twitch.login
 
-Log in a user or request additional permissions. By default, the user will be directed to the Twitch sign in & approve page, then back to the same page. This page must be the `redirect_uri` you specified when creating the client. You may customize the `redirect_uri` if the user is currently on a different page. Make sure the JavaScript SDK is included on the `redirect_uri` page.
+Log in a user or request additional permissions. This operation requires an NW.js-compatible runtime to open a login popup, the SDK initialized with the NW.js GUI object and the *Redirect URI* in the application's Connection settings set to `https://api.twitch.tv/kraken/`.
 
-Once the user is returned to the `redirect_uri` after authorization, the SDK will store the session infomation in [DOM Storage][] or cookies, so authentication will persist throughout your website. You may also store this token, associated with a user on your site, to make continued requests on behalf of that user.
+As opposed to the original version of the SDK, the Node version does not store the authentication token into a session storage, for there is none in Node and as Node modules remain loaded until the application is closed, there is no need for that. The token is simply stored in the memory and is lost upon exiting the application, just like the session storage in browsers.
 
 [DOM Storage]: https://developer.mozilla.org/en/DOM/Storage#sessionStorage
 
@@ -135,12 +143,12 @@ Twitch.login({
   scope: ['user_read', 'channel_read']
 });
 
-TODO: args list, scopes, popups for advanced functionality
+// TODO: args list, scopes, popups for advanced functionality
 ```
 
 ### Twitch.logout
 
-Reset the session and delete from persistent storage, which is akin to logging out. This does not deactivate the access token given to your app, so you can continue to perform actions if your server stored the token.
+Reset the session and delete from memory, which is akin to logging out. This does not deactivate the access token given to your app, so you can continue to perform actions if your server stored the token.
 
 #### Usage
 
@@ -169,14 +177,14 @@ Force an update of the status:
 ```javascript
 Twitch.getStatus({force: true}, function(err, status) {
   if (status.authenticated) {
-    console.log('authenticated!')
+    console.log('authenticated!');
   }
 }
 ```
 
 ### Twitch.getToken
 
-Retrieve the current OAuth token for a user, if one exists. This is useful for persisting an OAuth token to your backend.
+Retrieve the current OAuth token for a user, if one exists. This is useful for persisting an OAuth token to your backend, if there is any.
 
 #### Usage
 
@@ -220,7 +228,7 @@ This event is emitted when we no longer have a valid session for a user. This me
 
 ## Development
 
-First, install all the pre-requisites with npm
+First, install all the development pre-requisites with npm
 
 ```bash
 npm install
