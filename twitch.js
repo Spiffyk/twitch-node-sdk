@@ -309,6 +309,7 @@ function param(array) {
       }
       else {
         win.show();
+        win.focus();
       }
     });
   };
