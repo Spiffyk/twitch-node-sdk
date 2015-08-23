@@ -85,24 +85,12 @@ function param(array) {
         var data = JSON.parse(responseBody);
 
         Twitch.log('Response Data:', data);
-        if ( !(data && data.error) ) {
-          callback(null, data || null);
-          return;
-        }
-
-        Twitch.log('API Error:', data.error + ';', data.message);
-        if (authenticated && data.status === HTTP_CODES.unauthorized) {
-          // Invalid authentication code; destroy our session.
-          Twitch.logout(function() {
-            callback(data, null);
-          });
-        } else {
-          callback(data, null);
-        }
-      })
+        callback(null, data);
+      });
     });
 
     req.on('error', function (e) {
+      Twitch.log('API Error:', e);
       callback(e, null);
     });
 
@@ -112,12 +100,8 @@ function param(array) {
   // Log messages to the browser console if available, prefixed
   // with `[Twitch]`.
   Twitch.log = function(message) {
-    /*
     Array.prototype.unshift.call(arguments, '[Twitch]');
     console.log.apply(console, arguments);
-    */
-
-    console.log('[Twitch]', message);
   };
 })();
 // ## Initialization
