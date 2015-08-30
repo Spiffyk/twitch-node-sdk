@@ -146,11 +146,7 @@ function param(array) {
       gui = options.nw;
     }
 
-    initSession();
-
-    if (typeof callback === 'function') {
-      Twitch.getStatus(callback);
-    }
+    initSession(options.session, callback);
   };
 
   Twitch.extend({
@@ -208,6 +204,17 @@ function param(array) {
     });
   };
 
+  // Make a session object for the client.
+  var makeSession = function(session) {
+    return {
+      authenticated: !!session.token,
+      token: session.token,
+      scope: session.scope,
+      error: session.error,
+      errorDescription: session.errorDescription
+    };
+  };
+
   // Get the currently stored OAuth token.
   // Useful for sending OAuth tokens to your backend.
   var getToken = function() {
@@ -227,17 +234,6 @@ function param(array) {
     if (!config.session) {
       throw new Error('You must call init() before getStatus()');
     }
-
-    var makeSession = function(session) {
-      // Make a session object for the client.
-      return {
-        authenticated: !!session.token,
-        token: session.token,
-        scope: session.scope,
-        error: session.error,
-        errorDescription: session.errorDescription
-      };
-    };
 
     if (options && options.force) {
       updateSession(function(err, session) {
@@ -297,7 +293,7 @@ function param(array) {
 
         getStatus(function(err, status) {
           if (status.authenticated) {
-            Twitch.events.emit('auth.login');
+            Twitch.events.emit('auth.login', status);
           }
         });
 
@@ -332,12 +328,20 @@ function param(array) {
 
   // Retrieve sessions from persistent storage and
   // persist new ones.
-  initSession = function() {
-    config.session = {};
+  initSession = function(storedSession, callback) {
+    if (typeof storedSession === "function") {
+      callback = storedSession;
+    }
 
-    getStatus(function(err, status) {
+    config.session = (storedSession && makeSession(storedSession)) || {};
+
+    getStatus({ force: true }, function(err, status) {
       if (status.authenticated) {
-        Twitch.events.emit('auth.login');
+        Twitch.events.emit('auth.login', status);
+      }
+
+      if (typeof callback === "function") {
+        callback(err, status);
       }
     });
   };
