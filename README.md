@@ -69,7 +69,9 @@ You may use these assets for the Twitch Connect button:
 
 Initialize the Twitch API with your Client ID. This method must be called prior to other actions.
 
-If you want your users to be able to authenticate, you need to use an [NW.js](http://nwjs.io)-compatible runtime to show the login popup. In that case you also need to initialize the Twitch API with the ``nw.gui`` object.
+If you want your users to be able to authenticate, you need to use an [NW.js](http://nwjs.io)-compatible runtime to show the login popup. In that case you also need to initialize the Twitch API with the `nw.gui` object.
+
+Also, if your application has a session object stored somewhere, that session can be passed to the init function to speed up the login process.
 
 #### Usage
 
@@ -77,8 +79,13 @@ If you want your users to be able to authenticate, you need to use an [NW.js](ht
 // For use with NW.js-compatible runtime
 
 var gui = require('nw.gui');
+var status = retrieveStoredSession();
 
-Twitch.init({clientId: 'YOUR_CLIENT_ID_HERE', nw: gui}, function(error, status) {
+Twitch.init({
+  clientId: 'YOUR_CLIENT_ID_HERE',
+  session: status,
+  nw: gui
+}, function(error, status) {
   if (error) {
     // error encountered while loading
     console.log(error);
@@ -200,7 +207,7 @@ Most JavaScript-heavy apps use events to be notified of state changes. Some chan
 `Twitch.events.addListener` allows you to subscribe to an event:
 
 ```javascript
-Twitch.events.addListener('auth.login', function() {
+Twitch.events.addListener('auth.login', function(status) {
   // user is logged in
 });
 ```
@@ -208,7 +215,7 @@ Twitch.events.addListener('auth.login', function() {
 `Twitch.events.removeListener` allows you to remove listeners for an event:
 
 ```javascript
-var handleLogin = function() {
+var handleLogin = function(status) {
   alert("you're logged in!");
 };
 
@@ -220,7 +227,7 @@ Twitch.events.removeListener('auth.login', handleLogin);
 
 ### auth.login
 
-This event is emitted when we initialize a session for a user, either because the current page is a login `redirect_uri` or we have restored the session from persistent storage.
+This event is emitted when we initialize a session for a user, either because the user filled the login form and created a new session or a valid session had been passed to the init function. The listener is passed the session as a parameter.
 
 ### auth.logout
 
