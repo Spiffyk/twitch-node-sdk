@@ -4,6 +4,10 @@ The Twitch Node.js SDK provides rich functionality for accessing the Twitch API.
 
 For a detailed specification of API resources, see the [wiki](https://github.com/justintv/Twitch-API/wiki/API).
 
+## Installation
+
+To install the Twitch SDK into your existing NPM module, simply type `npm install twitch-sdk --save`. This will download the SDK for you to use in your application.
+
 ## Loading
 
 To integrate the Twitch JavaScript SDK in your Node application, follow these steps:
