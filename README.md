@@ -26,33 +26,33 @@ You can now perform actions that do not require authorization or have your users
 
 ### Login
 
-You need [NW.js](http://nwjs.io) (or a compatible runtime) for login to work.
+You need a GUI for login to work. As of version **0.3**, this SDK is compatible with [Electron](http://electron.atom.io) (formerly *Atom Shell*) and [NW.js](http://nwjs.io) (formerly *node-webkit*).
 
 First, you need to set your redirect URI. Go to the Twitch Connections settings of your app and set the *Redirect URI* to `https://api.twitch.tv/kraken/`. The SDK uses that as the 'dummy' page to retrieve its tokens.
 
-To add login functionality, add the button to your page:
+To add login functionality, you need to have the SDK initialized with the GUI.
 
-```html
-<img src="http://ttv-api.s3.amazonaws.com/assets/connect_dark.png" class="twitch-connect" href="#" />
-```
-
-Now add the JavaScript to trigger the login:
+For **Electron**, you can initialize with the following code:
 
 ```javascript
-$('.twitch-connect').click(function() {
-  Twitch.login({
-    scope: ['user_read', 'channel_read']
-  });
-})
+// This code needs to be run in the main process
+var Twitch = require("twitch-sdk");
+
+Twitch.init({clientId: 'YOUR_CLIENT_ID_HERE', electron: true}, function(error, status) {
+  // the SDK is now loaded with Electron
+});
 ```
 
-You probably only want to show the button when the user is not logged in, so add this to the callback on Twitch.init:
+If you want to use **NW.js**, you can initialize the SDK with the following:
 
 ```javascript
-if (status.authenticated) {
-  // Already logged in, hide button
-  $('.twitch-connect').hide()
-}
+// This code needs to be run in an existing window.
+var gui = require('nw.gui');
+var Twitch = require("twitch-sdk");
+
+Twitch.init({clientId: 'YOUR_CLIENT_ID_HERE', nw: gui}, function(error, status) {
+  // the SDK is now loaded with NW.js
+});
 ```
 
 #### Assets
@@ -69,14 +69,59 @@ You may use these assets for the Twitch Connect button:
 
 Initialize the Twitch API with your Client ID. This method must be called prior to other actions.
 
-If you want your users to be able to authenticate, you need to use an [NW.js](http://nwjs.io)-compatible runtime to show the login popup. In that case you also need to initialize the Twitch API with the `nw.gui` object.
+If you want your users to be able to authenticate, you need to use a runtime with a GUI (as of **0.3** the compatible runtimes are Electron and NW.js) to show the login popup and initialize it accordingly.
 
 Also, if your application has a session object stored somewhere, that session can be passed to the init function to speed up the login process.
 
 #### Usage
 
+##### Node.js / IO.js
 ```javascript
-// For use with NW.js-compatible runtime
+// For use with Node.js or IO.js
+// With this, the user cannot authenticate, the application has access to a stored session object.
+
+var gui = require('nw.gui');
+var status = retrieveStoredSession();
+
+Twitch.init({
+  clientId: 'YOUR_CLIENT_ID_HERE',
+  session: status
+}, function(error, status) {
+  if (error) {
+    // error encountered while loading
+    console.log(error);
+  }
+  // the sdk is now loaded
+});
+```
+
+##### Electron
+
+```javascript
+// For use with an Electron-compatible runtime
+
+var status = retrieveStoredSession();
+
+Twitch.init({
+  clientId: 'YOUR_CLIENT_ID_HERE',
+  session: status,
+  electron: true
+}, function(error, status) {
+  if (error) {
+    // error encountered while loading
+    console.log(error);
+  }
+  // the sdk is now loaded
+  if (status.authenticated) {
+    // user is currently logged in
+  }
+});
+```
+
+##### NW.js
+
+```javascript
+// For use with an NW.js-compatible runtime
 
 var gui = require('nw.gui');
 var status = retrieveStoredSession();
