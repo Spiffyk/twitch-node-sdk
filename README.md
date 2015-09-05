@@ -182,7 +182,7 @@ The Twitch JavaScript SDK enables your users to log on or register using their T
 
 ### Twitch.login
 
-Log in a user or request additional permissions. This operation requires an NW.js-compatible runtime to open a login popup, the SDK initialized with the NW.js GUI object and the *Redirect URI* in the application's Connection settings set to `https://api.twitch.tv/kraken/`.
+Log in a user or request additional permissions. This operation requires a runtime with a GUI to open a login popup, the SDK initialized with the GUI runtime and the *Redirect URI* in the application's Connection settings set to `https://api.twitch.tv/kraken/`.
 
 As opposed to the original version of the SDK, the Node version does not store the authentication token into a session storage, for there is none in Node and as Node modules remain loaded until the application is closed, there is no need for that. The token is simply stored in the memory and is lost upon exiting the application, just like the session storage in browsers.
 
@@ -212,7 +212,7 @@ Twitch.logout(function(error) {
 
 ### Twitch.getStatus
 
-Retrieve the current login status of a user. Whenever possible, `getStatus` will try to use the stored session for speed. You can force `getStatus` to check the stored session against the API if needed.
+Retrieve the current login status of a user. Whenever possible, `getStatus` will try to use the stored session for speed. You can force `getStatus` to check the stored session against the API if needed. Your application can store this status object and later initialize the SDK with that object to speed up the login process.
 
 #### Usage
 
