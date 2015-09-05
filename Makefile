@@ -3,6 +3,7 @@ TESTS = test/*.js
 SRC = lib/node.pre.js \
 	lib/twitch.core.js \
 	lib/twitch.init.js \
+	lib/twitch.popup.js \
 	lib/twitch.auth.js \
 	lib/twitch.events.js \
 	lib/node.post.js

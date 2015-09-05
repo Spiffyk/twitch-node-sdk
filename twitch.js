@@ -1,10 +1,13 @@
 var https = require('https');
 var fs = require('fs');
 var path = require('path');
+var URL = require('url');
 
-var gui = false;
+var gui_type = null; // Can be null, 'nw' or 'electron'
+var gui = null; // For NW.js
+var BrowserWindow = null; // For Electron
 
-var Twitch, storage, initSession, parseFragment,
+var Twitch, storage, initSession, parseFragment, popupLogin,
 	config = {};
 
 function param(array) {
@@ -143,7 +146,12 @@ function param(array) {
     config.clientId = options.clientId;
 
     if (options.nw) {
+      gui_type = "nw";
       gui = options.nw;
+    }
+    else if (options.electron) {
+      gui_type = "electron";
+      BrowserWindow = require("browser-window");
     }
 
     initSession(options.session, callback);
@@ -152,6 +160,90 @@ function param(array) {
   Twitch.extend({
     init: init
   });
+})();
+(function() {
+	var WIDTH = 660,
+			HEIGHT = 600;
+
+	// Shows a login popup using the NW.js API
+	function popupNWLogin(params) {
+		var url = Twitch.baseUrl + 'oauth2/authorize?' + param(params);
+
+    var win = gui.Window.open(url, {
+      title: 'Login with TwitchTV',
+      width: WIDTH,
+      height: HEIGHT,
+      toolbar: false,
+      show: false,
+      resizable: true
+    });
+
+    win.on('loaded', function() {
+      var w = win.window;
+      if (w.location.hostname == 'api.twitch.tv' && w.location.pathname == '/kraken/') {
+        config.session = parseFragment(w.location.hash);
+
+        Twitch.getStatus(function(err, status) {
+          if (status.authenticated) {
+            Twitch.events.emit('auth.login', status);
+          }
+        });
+
+        win.close();
+      }
+      else {
+        win.show();
+        win.focus();
+      }
+    });
+	}
+
+	// Shows a login popup using the Electron API
+	function popupElectronLogin(params) {
+		var url = Twitch.baseUrl + 'oauth2/authorize?' + param(params);
+
+		var win = new BrowserWindow({
+			width: WIDTH,
+			height: HEIGHT,
+			resizable: false,
+			show: false
+		});
+
+		win.loadUrl(url);
+		win.webContents.on('did-finish-load', function() {
+			var location = URL.parse(win.webContents.getUrl());
+
+			if (location.hostname == 'api.twitch.tv' && location.pathname == '/kraken/') {
+        config.session = parseFragment(location.hash);
+
+        Twitch.getStatus(function(err, status) {
+          if (status.authenticated) {
+            Twitch.events.emit('auth.login', status);
+          }
+        });
+
+        win.close();
+      }
+      else {
+        win.show();
+      }
+		});
+	}
+
+	// Shows a login popup for the current GUI platform.
+	popupLogin = function(params) {
+		switch(gui_type) {
+			case 'nw':
+				popupNWLogin(params);
+				break;
+			case 'electron':
+				popupElectronLogin(params);
+				break;
+			default:
+				throw new Error('The Twitch SDK was not initialized with any compatible GUI API.');
+				break;
+		}
+	};
 })();
 /*jshint expr:true*/
 /*global Twitch*/
@@ -257,8 +349,8 @@ function param(array) {
   //       scope: ['user_read', 'channel_read']
   //     });
   var login = function(options) {
-    if (!gui) {
-      throw new Error('Cannot login without NW.js-compatible GUI.');
+    if (!gui_type) {
+      throw new Error('Cannot login without a GUI.');
     }
 
     if (!options.scope) {
@@ -275,35 +367,7 @@ function param(array) {
       throw new Error('You must call init() before login()');
     }
 
-    var url = Twitch.baseUrl + 'oauth2/authorize?' + param(params);
-
-    var win = gui.Window.open(url, {
-      title: 'Login with TwitchTV',
-      width: 660,
-      height: 600,
-      toolbar: false,
-      show: false,
-      resizable: true
-    });
-
-    win.on('loaded', function() {
-      var w = win.window;
-      if (w.location.hostname == 'api.twitch.tv' && w.location.pathname == '/kraken/') {
-        config.session = parseFragment(w.location.hash);
-
-        getStatus(function(err, status) {
-          if (status.authenticated) {
-            Twitch.events.emit('auth.login', status);
-          }
-        });
-
-        win.close();
-      }
-      else {
-        win.show();
-        win.focus();
-      }
-    });
+    popupLogin(params);
   };
 
   // Reset the session and delete from persistent storage, which is
