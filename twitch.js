@@ -206,7 +206,8 @@ function param(array) {
 			width: WIDTH,
 			height: HEIGHT,
 			resizable: false,
-			show: false
+			show: false,
+			"node-integration": false
 		});
 
 		win.loadUrl(url);
