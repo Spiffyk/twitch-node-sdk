@@ -206,7 +206,8 @@ function param(array) {
 			width: WIDTH,
 			height: HEIGHT,
 			resizable: false,
-			show: false
+			show: false,
+			"node-integration": false
 		});
 
 		win.loadUrl(url);
@@ -360,8 +361,12 @@ function param(array) {
       response_type: 'token',
       client_id: config.clientId,
       redirect_uri: 'https://api.twitch.tv/kraken/',
-      scope: options.scope.join(' ')
+      scope: options.scope.join(' '),
     };
+
+    if(options.force_verify) {
+      params.force_verify = true;
+    }
 
     if (!params.client_id) {
       throw new Error('You must call init() before login()');
