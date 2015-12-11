@@ -19,5 +19,6 @@ twitch.js: $(SRC)
 
 clean:
 	rm -f twitch.js
+	rm -R docco
 
 .PHONY: docs
