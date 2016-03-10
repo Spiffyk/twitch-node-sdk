@@ -84,7 +84,6 @@ Also, if your application has a session object stored somewhere, that session ca
 // For use with Node.js or IO.js
 // With this, the user cannot authenticate, the application has access to a stored session object.
 
-var gui = require('nw.gui');
 var status = retrieveStoredSession();
 
 Twitch.init({
