@@ -3,17 +3,17 @@
   "version": "0.3.1",
   "description": "The Twitch JavaScript SDK rewritten for use with Node.js, IO.js or NW.js",
   "homepage": "https://github.com/spiffyk/twitch-node-sdk",
+
   "author": {
     "name": "Spiffyk",
     "url": "http://spiffyk.cz"
   },
+
   "repository": {
     "type": "git",
     "url": "https://github.com/spiffyk/twitch-node-sdk.git"
   },
+
   "main": "twitch.js",
-  "license": "MIT",
-  "devDependencies": {
-    "docco": "latest"
-  }
+  "license": "MIT"
 }
