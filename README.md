@@ -30,7 +30,7 @@ You can now perform actions that do not require authorization or have your users
 
 ### Login
 
-You need a GUI for login to work. As of version **0.3**, this SDK is compatible with [Electron](http://electron.atom.io) (formerly *Atom Shell*) and [NW.js](http://nwjs.io) (formerly *node-webkit*).
+You need a GUI for login to work. As of version **0.3**, this SDK is compatible with [Electron](http://electron.atom.io) and [NW.js](http://nwjs.io).
 
 First, you need to set your redirect URI. Go to the Twitch Connections settings of your app and set the *Redirect URI* to `https://api.twitch.tv/kraken/`. The SDK uses that as the 'dummy' page to retrieve its tokens.
 
@@ -121,7 +121,32 @@ Twitch.init({
 });
 ```
 
-##### NW.js
+##### NW.js (0.13 and higher)
+
+**This is experimental at the moment!**
+
+```javascript
+// For use with an NW.js-compatible runtime
+
+var status = retrieveStoredSession();
+
+Twitch.init({
+  clientId: 'YOUR_CLIENT_ID_HERE',
+  session: status,
+  nw: true
+}, function(error, status) {
+  if (error) {
+    // error encountered while loading
+    console.log(error);
+  }
+  // the sdk is now loaded
+  if (status.authenticated) {
+    // user is currently logged in
+  }
+});
+```
+
+##### NW.js (0.12 and lower)
 
 ```javascript
 // For use with an NW.js-compatible runtime
