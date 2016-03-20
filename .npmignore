@@ -1,9 +1,6 @@
 node_modules
-lib
-test
-Makefile
 .DS_Store
 .gitignore
 
 docs
-docco
+lib/twitch.events.doc.js
