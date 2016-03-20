@@ -1,0 +1,8 @@
+{
+	"name": "Twitch Node.js SDK",
+	"description": "The Twitch JavaScript SDK rewritten for use with Node.js, IO.js or NW.js",
+	"url": "https://www.npmjs.com/package/twitch-sdk",
+	"options": {
+		"outdir": "./docs"
+	}
+}
