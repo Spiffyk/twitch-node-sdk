@@ -21,20 +21,7 @@ exports.init = init.init;
 exports.api = core.api;
 
 // Events
-exports.events = {
-  on: core.events.on,
-  addListener: core.events.on,
-  once: core.events.once,
-  removeListener: core.events.removeListener,
-  getMaxListeners: core.events.getMaxListeners,
-  listenerCount: core.events.listenerCount
-};
-exports.on = core.events.on;
-exports.addListener = core.events.on;
-exports.once = core.events.once;
-exports.removeListener = core.events.removeListener;
-exports.getMaxListeners = core.events.getMaxListeners;
-exports.listenerCount = core.events.listenerCount;
+exports.events = core.events;
 
 
 // Auth
